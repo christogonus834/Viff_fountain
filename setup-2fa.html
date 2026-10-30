@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Set up two-factor login</title>
+<meta name="robots" content="noindex"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;font-family:'Outfit',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:linear-gradient(155deg,#0b1f5c,#16307a);color:#1f2937}
+  .card{background:#fff;width:100%;max-width:470px;border-radius:20px;padding:28px 26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  h1{margin:0 0 6px;font-size:1.35rem;color:#0b1f5c}
+  p{margin:0 0 12px;line-height:1.5;font-size:.94rem}
+  .muted{color:#5b6478;font-size:.85rem}
+  ol{margin:0 0 16px;padding-left:20px;line-height:1.6;font-size:.94rem}
+  .btn{appearance:none;border:0;border-radius:11px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;width:100%;background:linear-gradient(135deg,#8dc63f,#e8c46a);color:#0b1f5c}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn.line{background:#fff;border:1.5px solid #dfe3ea;margin-top:10px}
+  .qr{display:flex;justify-content:center;margin:12px 0;padding:12px;background:#fff;border:1px solid #e5e9f2;border-radius:14px}
+  .secret{display:flex;gap:8px;align-items:center;justify-content:space-between;background:#f5f7fb;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:.84rem}
+  .secret code{font-weight:700;letter-spacing:.06em;word-break:break-all;user-select:all}
+  .secret button{appearance:none;border:1.5px solid #dfe3ea;background:#fff;border-radius:8px;padding:5px 10px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
+  input.code{width:100%;padding:13px;border:1.5px solid #dfe3ea;border-radius:11px;font:inherit;font-size:1.4rem;letter-spacing:.35em;text-align:center;margin-bottom:8px}
+  input.code:focus{outline:none;border-color:#8dc63f;box-shadow:0 0 0 3px rgba(141,198,63,.2)}
+  .err{color:#b91c1c;font-weight:600;font-size:.88rem;min-height:1.2em;margin-bottom:8px}
+  .ok{font-size:2.4rem;text-align:center;margin-bottom:6px}
+  .foot{margin-top:16px;text-align:center}
+  .foot a{color:#5b6478;font-size:.85rem}
+  [hidden]{display:none!important}
+</style>
+<link rel="stylesheet" href="viff-tokens.css"/>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-auth">
+<main class="card">
+  <section id="s-load"><h1>Checking your account&hellip;</h1></section>
+
+  <section id="s-intro" hidden>
+    <h1>Set up two-factor login</h1>
+    <p>For the safety of student records and school money, every administrator must sign in with a second step: a 6-digit code from an authenticator app on their phone.</p>
+    <ol>
+      <li>Install <strong>Google Authenticator</strong>, <strong>Microsoft Authenticator</strong> or <strong>Authy</strong> on your phone.</li>
+      <li>Scan the QR code we show you.</li>
+      <li>Type the 6-digit code to finish.</li>
+    </ol>
+    <button class="btn" id="b-start" type="button">Start set-up</button>
+    <p class="err" id="e-intro" role="alert"></p>
+  </section>
+
+  <section id="s-scan" hidden>
+    <h1>Scan, then confirm</h1>
+    <p>Open your authenticator app, choose <strong>Add account</strong> and scan this code. On the same phone? Use the setup key below instead.</p>
+    <div class="qr" id="qr" aria-label="QR code for your authenticator app"></div>
+    <div class="secret"><span>Setup key<br><code id="secret"></code></span><button type="button" id="b-copy">Copy</button></div>
+    <label for="code" class="muted">6-digit code from the app</label>
+    <input class="code" id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"/>
+    <div class="err" id="e-scan" role="alert"></div>
+    <button class="btn" id="b-confirm" type="button">Confirm and turn on</button>
+  </section>
+
+  <section id="s-done" hidden>
+    <div class="ok" aria-hidden="true">&#10003;</div>
+    <h1 style="text-align:center">Two-factor login is on</h1>
+    <p style="text-align:center">From now on you will be asked for a code from your app every time you sign in.</p>
+    <p class="muted" style="text-align:center">Keep your phone safe. If you lose it, a superadmin can reset your two-factor login so you can set it up again.</p>
+    <button class="btn" id="b-go" type="button">Continue to the dashboard</button>
+  </section>
+
+  <section id="s-error" hidden>
+    <h1>Something went wrong</h1>
+    <p id="e-fatal"></p>
+    <button class="btn" type="button" onclick="location.reload()">Try again</button>
+  </section>
+
+  <div class="foot"><a href="#" id="b-out">Sign out</a></div>
+</main>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="qr-svg.js"></script>
+<script src="setup-2fa.js"></script>
+</body>
+</html>

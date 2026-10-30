@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Principal Dashboard – VIFF Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"/>
+<link rel="stylesheet" href="dashboard.css"/>
+<link rel="stylesheet" href="tfis-ui.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="admin-overview-api.js"></script>
+<script src="tfis-ui.js"></script>
+<script src="tfis-parts.js"></script>
+<script src="qr-svg.js"></script>
+<script src="admin-overview.js"></script>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="ui2">
+<div id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-crest logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+    <div><div class="sidebar-school">VIFF</div><div class="sidebar-abbr">Admin overview</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <button class="nav-item active" data-page="overview" onclick="showPage('overview',this)"><span class="icon" data-icon="home"></span>Dashboard</button>
+    <div class="nav-section-label">&nbsp;</div>
+    <a class="nav-item" href="dashboard-admin-students.html"><span class="icon" data-icon="user"></span>Student Management</a>
+    <a class="nav-item" href="dashboard-admin-finance.html"><span class="icon" data-icon="wallet"></span>Finance Management</a>
+    <a class="nav-item" href="dashboard-admin.html"><span class="icon" data-icon="arrow"></span>Full Admin Panel</a>
+    <a class="nav-item" href="dashboard-admin-documents.html"><span class="icon" data-icon="doc"></span>ID Cards &amp; Report Cards</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="a-avatar">A</div>
+      <div><div class="sidebar-user-name" id="a-name">Loading…</div><div class="sidebar-user-role" id="a-role">Admin</div></div>
+    </div>
+    <button class="btn-logout" onclick="logout()"><span class="icon" data-icon="logout"></span> Logout</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="openSidebar()" aria-label="Open menu"><span class="icon" data-icon="menu"></span></button>
+      <span class="page-title" id="page-title">Dashboard</span>
+    </div>
+  </div>
+  <div class="content">
+    <div id="page-overview" class="tab-content active"><div id="overview-body"><div class="ui-skel" style="height:240px;border-radius:14px"></div></div></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

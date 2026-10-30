@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ID Cards – VIFF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"/>
+<link rel="stylesheet" href="tfis-print.css"/>
+<link rel="stylesheet" href="tfis-ui.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="tfis-ui.js"></script>
+<script src="tfis-parts.js"></script>
+<script src="my-id-cards.js"></script>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="ui-print ui2">
+  <div class="pr-toolbar">
+    <h1>My Children’s ID Cards</h1>
+    <div class="pr-actions"><button type="button" class="pr-btn" onclick="history.back()">Back</button></div>
+  </div>
+  <div class="pr-wrap" id="pr-body"><div class="pr-skel"></div></div>
+</body>
+</html>

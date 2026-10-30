@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About – VIFF FOUNDATION INTERNATIONAL ACADEMY</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .history-split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-bottom:4rem;}
+    @media(max-width:700px){.history-split{grid-template-columns:1fr;}}
+    .history-img{background:linear-gradient(135deg,var(--royal),var(--royal-mid));border-radius:18px;height:320px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .history-img-icon{font-size:5rem;z-index:1;}
+    .history-img::before{content:'VIFF';position:absolute;bottom:-15px;right:-10px;font-family:'Cormorant Garamond',serif;font-size:9rem;font-weight:700;color:rgba(141,198,63,.07);}
+    .history-img-tag{position:absolute;top:18px;left:18px;background:rgba(141,198,63,.15);border:1px solid rgba(141,198,63,.4);color:var(--gold-light);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:5px 12px;border-radius:20px;}
+    /* Vision/Mission cards */
+    .vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:3rem;}
+    @media(max-width:600px){.vm-grid{grid-template-columns:1fr;}}
+    .vm-card{border-radius:14px;padding:2rem;color:var(--white);}
+    .vm-vision{background:linear-gradient(135deg,var(--royal),var(--royal-mid));}
+    .vm-mission{background:linear-gradient(135deg,#8a6a00,#c9a843);}
+    .vm-card h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:.75rem;display:flex;align-items:center;gap:8px;}
+    .vm-card p{font-size:.88rem;line-height:1.75;color:rgba(255,255,255,.82);}
+  </style>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-about">
+
+<div id="announce-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-crest logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+      <div class="logo-text">
+        <div class="logo-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+        <div class="logo-abbr">VIFF · Lokogoma, Abuja</div>
+      </div>
+    </a>
+    <nav id="main-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      <a href="events.html">Events</a>
+      <a href="admission.html">Admission</a>
+      <a href="results.html">Check Results</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-results">Portal Login</a>
+    </nav>
+    <div id="hamburger" class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding:4.5rem 2rem 4rem;">
+  <div class="hero-stripe"></div>
+  <div class="hero-inner">
+    <div class="hero-badge fade-up"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg> Our Story</div>
+    <h1 class="fade-up d1">About <em>VIFF Foundation</em><br>International Academy</h1>
+    <p class="hero-sub fade-up d2">Two decades of faith-based, excellence-driven education in the heart of Lokogoma, Abuja.</p>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section class="section">
+  <div class="section-inner">
+    <div class="history-split">
+      <div>
+        <div class="section-eyebrow">Our History</div>
+        <h2 class="section-title" data-site="about_heading">A Legacy Rooted in<br>Faith Since 2005</h2>
+        <p style="color:var(--muted);line-height:1.75;margin-bottom:1rem;font-size:.93rem;">
+          VIFF FOUNDATION INTERNATIONAL ACADEMY was founded in 2005 by a group of Christian educators and community leaders with a clear mandate: to establish a school where academic rigour and Christian values go hand in hand.
+        </p>
+        <p style="color:var(--muted);line-height:1.75;font-size:.93rem;" data-site="about_text">
+          What began as a small nursery and primary school at Emerald Garden Estate, Dakwo District, Lokogoma, Abuja, has grown into a full-scale international school offering nursery, primary, junior secondary, and senior secondary programmes — all under one roof.
+        </p>
+      </div>
+      <div class="history-img scroll-reveal">
+        <div class="history-img-tag">Est. 2005</div>
+        <div class="history-img-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 10L12 4l9 6"/><rect x="4" y="10" width="16" height="11"/><path d="M9 21v-5h6v5"/></g></svg></div>
+      </div>
+    </div>
+
+    <!-- VISION & MISSION -->
+    <div class="vm-grid">
+      <div class="vm-card vm-vision scroll-reveal">
+        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></svg> Our Vision</h3>
+        <p><b>Building Children with Excellence:</b><br>The fear of God, Maximizing Their Potentials.</p>
+      </div>
+      <div class="vm-card vm-mission scroll-reveal">
+        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></g></svg> Our Mission</h3>
+        <ul class="vm-list">
+          <li>Nurturing, Challenging, Godly and child-centred Environment.</li>
+          <li>Dedicated and well-seasoned teachers.</li>
+          <li>Holistic care, incorporating latest audio visual technologies.</li>
+          <li>Affiliation to foreign examination.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="motto-band scroll-reveal">Our motto: <b>Godliness with Excellence</b></p>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section-eyebrow" style="margin-top:1rem;">Key Milestones</div>
+    <h2 class="section-title" style="margin-bottom:2rem;">Our Journey</h2>
+    <div class="timeline">
+      <div class="timeline-item scroll-reveal">
+        <div class="timeline-year">2005</div>
+        <h4>Foundation</h4>
+        <p>School founded at Emerald Garden Estate, Dakwo District, Lokogoma, Abuja, with a nursery/primary arm and 120 pioneer students.</p>
+      </div>
+      <div class="timeline-item scroll-reveal">
+        <div class="timeline-year">2009</div>
+        <h4>Junior Secondary Opens</h4>
+        <p>JS1–JS3 classes added, with dedicated science labs and a computer room.</p>
+      </div>
+      <div class="timeline-item scroll-reveal">
+        <div class="timeline-year">2013</div>
+        <h4>First WAEC Set</h4>
+        <p>Inaugural SS3 class records a 96% WAEC pass rate — the school's proudest milestone.</p>
+      </div>
+      <div class="timeline-item scroll-reveal">
+        <div class="timeline-year">2018</div>
+        <h4>New School Block</h4>
+        <p>A new 3-storey block commissioned, increasing capacity and adding a library and assembly hall.</p>
+      </div>
+      <div class="timeline-item scroll-reveal">
+        <div class="timeline-year">2025</div>
+        <h4>Digital Results Portal</h4>
+        <p>Launch of online result checking system — students can now view results securely using coupon codes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLUBS & ACTIVITIES -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-eyebrow">Student Life</div>
+    <h2 class="section-title">Clubs, Sports &amp; Activities</h2>
+    <p class="section-sub">Learning extends beyond the classroom. Our students thrive through sport, arts, faith, and leadership activities.</p>
+    <div class="activities-grid">
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5c3 3 3 13.5 0 17M4 9c4 1.5 12 1.5 16 0M4 15c4-1.5 12-1.5 16 0"/></g></svg></span> Football Club</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5c3 3 3 13.5 0 17M4 9c4 1.5 12 1.5 16 0M4 15c4-1.5 12-1.5 16 0"/></g></svg></span> Basketball</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c1 1.3 2.2 2 3.5 2s2.5-.7 3.5-2"/><path d="M9 10h.01M15 10h.01"/></g></svg></span> Drama &amp; Theatre</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M9 18V5l10-2v13"/><circle cx="7" cy="18" r="2.3"/><circle cx="17" cy="16" r="2.3"/></g></svg></span> Music Band</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4z"/></g></svg></span> Debate Club</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="4" y="5" width="16" height="10" rx="1.2"/><path d="M2.5 19h19"/></g></svg></span> Coding Club</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M10 3.5h4M10.5 3.5v5.5L6 18a1.6 1.6 0 0 0 1.4 2.4h9.2A1.6 1.6 0 0 0 18 18l-4.5-9V3.5"/><path d="M8 15h8"/></g></svg></span> Science Club</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 6.5c-2-1.5-5-2-8-1.5v12.5c3-.5 6 0 8 1.5c2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v12.5"/></g></svg></span> Bible Study Group</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.1 0 1.8-.9 1.8-1.8 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6H16a4.5 4.5 0 0 0 4.5-4.5c0-3.8-3.8-6.7-8.5-6.7z"/><circle cx="8" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="10.5" r="1" fill="currentColor" stroke="none"/></g></svg></span> Art &amp; Craft</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 20C4 12 9 5 19 4c1 10-6 15-13 16z"/><path d="M6 20c2-4 5-7 9-9"/></g></svg></span> Environmental Club</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2.5 12h4l2-6 3 12 2-9 1.5 3h6.5"/></g></svg></span> Athletics</div>
+      <div class="activity-tag"><span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3"/></g></svg></span> Choir</div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBJECTS TABLE -->
+<section class="section" id="subjects">
+  <div class="section-inner">
+    <div class="section-eyebrow">Curriculum</div>
+    <h2 class="section-title" style="margin-bottom:2rem;">Subjects Offered</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>Category</th><th>Classes</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>English Language</td><td>Core</td><td>JSS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Mathematics</td><td>Core</td><td>JSS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Biology</td><td>Science</td><td>JSS2 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Chemistry</td><td>Science</td><td>SS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Physics</td><td>Science</td><td>SS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>ICT / Computer Science</td><td>Technology</td><td>JSS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Christian Religious Studies</td><td>Core</td><td>JSS1 – SS3</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Economics</td><td>Social Science</td><td>SS1 – SS3</td><td style="color:var(--muted);">Optional</td></tr>
+          <tr><td>Government</td><td>Social Science</td><td>SS1 – SS3</td><td style="color:var(--muted);">Optional</td></tr>
+          <tr><td>Literature in English</td><td>Arts</td><td>SS1 – SS3</td><td style="color:var(--muted);">Optional</td></tr>
+          <tr><td>Agricultural Science</td><td>Vocational</td><td>JSS1 – SS2</td><td style="color:var(--green);font-weight:600;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg> Compulsory</td></tr>
+          <tr><td>Fine Arts</td><td>Creative</td><td>JSS1 – SS3</td><td style="color:var(--muted);">Optional</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+        <div class="footer-brand-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div><p class="motto-line">Godliness with Excellence</p>
+      </div>
+      <p>Raising godly, brilliant leaders of tomorrow. Faith · Excellence · Character.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="results.html">Results Checker</a>
+    </div>
+    <div class="footer-col">
+      <h4>Address</h4>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Emerald Garden Estate, Dakwo District</p>
+      <p>Sunnyvale, Lokogoma, Abuja</p>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 4.5c1 0 2 .3 2.3 1.1l1 2.4c.3.7 0 1.6-.6 2.1l-1.1.9c1 2.5 3 4.5 5.5 5.5l.9-1.1c.5-.6 1.4-.9 2.1-.6l2.4 1c.8.3 1.1 1.3 1.1 2.3v1.6c0 1.2-1.1 2-2.3 1.8C10.5 20.4 3.6 13.5 2.6 6.8 2.4 5.6 3.2 4.5 4.4 4.5H6z"/></g></svg> +234 800 000 0000</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Access</h4>
+      <a href="results.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg> Check Results</a>
+      <a href="contact.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 6.5l8.5 7 8.5-7"/></g></svg> Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2025 VIFF FOUNDATION INTERNATIONAL ACADEMY · SS1 ICT Term 2 Project</div>
+</footer>
+
+<div id="toast"></div>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

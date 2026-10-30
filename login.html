@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Login – VIFF Portal</title>
+<link rel="stylesheet" href="style.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<style>
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,var(--royal) 0%,var(--royal-mid) 50%,#112070 100%);padding:1.5rem;position:relative;overflow:hidden;}
+body::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(141,198,63,.03) 40px,rgba(141,198,63,.03) 41px);}
+.bg-circle{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(141,198,63,.12) 0%,transparent 70%);}
+.bg-c1{width:500px;height:500px;top:-150px;right:-150px;}
+.bg-c2{width:350px;height:350px;bottom:-100px;left:-100px;}
+
+.login-card{background:var(--white);border-radius:22px;padding:2.75rem;width:100%;max-width:440px;box-shadow:0 30px 80px rgba(0,0,0,.3);position:relative;z-index:2;}
+.login-logo{text-align:center;margin-bottom:2rem;}
+.login-crest{width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--royal);margin:0 auto 1rem;box-shadow:0 4px 16px rgba(141,198,63,.35);}
+.login-school{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--royal);}
+.login-sub{font-size:.78rem;color:var(--muted);margin-top:3px;}
+
+.role-tabs{display:flex;background:#f4f6fb;border-radius:10px;padding:4px;gap:3px;margin-bottom:2rem;}
+.role-tab{flex:1;padding:9px 6px;background:transparent;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:.77rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;}
+.role-tab.active{background:var(--white);color:var(--royal);font-weight:700;box-shadow:0 1px 6px rgba(0,0,0,.1);}
+
+.form-group{margin-bottom:1.15rem;}
+.form-group label{display:block;font-size:.81rem;font-weight:600;color:var(--royal);margin-bottom:6px;}
+.form-group input{width:100%;padding:12px 14px;border:1.5px solid #e2e2e2;border-radius:9px;font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--text);background:#fafafa;outline:none;transition:all .2s;}
+.form-group input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(141,198,63,.12);background:var(--white);}
+
+.input-wrap{position:relative;}
+.input-wrap input{padding-right:44px;}
+.toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;}
+
+.forgot-link{text-align:right;margin-top:-6px;margin-bottom:1.25rem;}
+.forgot-link a{font-size:.8rem;color:var(--gold);text-decoration:none;font-weight:600;}
+
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--royal);font-family:'Outfit',sans-serif;font-weight:700;font-size:.95rem;border:none;border-radius:10px;cursor:pointer;transition:all .25s;box-shadow:0 4px 16px rgba(141,198,63,.35);}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(141,198,63,.5);}
+
+.login-footer{margin-top:1.75rem;text-align:center;font-size:.81rem;color:var(--muted);}
+.login-footer a{color:var(--royal);font-weight:600;text-decoration:none;}
+.login-footer a:hover{color:var(--gold);}
+
+.alert-box{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;padding:10px 14px;border-radius:9px;font-size:.83rem;margin-bottom:1rem;display:none;}
+.alert-box.show{display:block;}
+
+/* Each role section is hidden by default */
+.student-only,.parent-only,.teacher-only,.admin-only{display:none;}
+
+/* Password policy hint box */
+.pw-policy{background:#f1f9e2;border:1px solid rgba(141,198,63,.4);border-radius:9px;padding:10px 13px;margin-top:6px;font-size:.75rem;color:#4a5370;line-height:1.6;display:none;}
+.pw-policy.show{display:block;}
+.pw-rule{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.pw-rule .dot{width:8px;height:8px;border-radius:50%;background:#d1d5db;flex-shrink:0;transition:background .2s;}
+.pw-rule.pass .dot{background:#16a34a;}
+.pw-rule.fail .dot{background:#dc2626;}
+.pw-strength{height:4px;background:#e5e7eb;border-radius:2px;margin-top:8px;overflow:hidden;}
+.pw-strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%;}
+
+.back-site{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.6);font-size:.82rem;text-decoration:none;position:absolute;top:1.5rem;left:1.5rem;z-index:3;transition:color .2s;}
+.back-site:hover{color:var(--gold-light);}
+
+/* two-factor code box (admin / superadmin sign-in only) */
+.mfa-overlay { position: fixed; inset: 0; background: rgba(11,31,69,.72); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1000; }
+.mfa-box { background: #fff; width: 100%; max-width: 380px; border-radius: 14px; padding: 26px 24px 20px; box-shadow: 0 20px 60px rgba(0,0,0,.35); font-family: inherit; }
+.mfa-title { margin: 0 0 6px; font-size: 1.15rem; color: #0b1f5c; }
+.mfa-help { margin: 0 0 16px; font-size: .9rem; color: #566078; line-height: 1.45; }
+.mfa-input { width: 100%; box-sizing: border-box; font-size: 1.5rem; letter-spacing: .4em; text-align: center; padding: 12px 10px; border: 1.5px solid #cfd5e3; border-radius: 10px; font-family: inherit; }
+.mfa-input:focus { outline: none; border-color: #8dc63f; box-shadow: 0 0 0 3px rgba(141,198,63,.25); }
+.mfa-error { min-height: 1.3em; margin: 8px 0 12px; font-size: .85rem; color: #c22f2b; font-weight: 600; }
+.mfa-btn { width: 100%; padding: 12px; border: 0; border-radius: 10px; background: #8dc63f; color: #0b1f5c; font-weight: 800; font-size: .95rem; cursor: pointer; font-family: inherit; }
+.mfa-btn:disabled { opacity: .6; cursor: default; }
+.mfa-cancel { display: block; margin: 12px auto 0; background: none; border: 0; color: #566078; font-size: .85rem; cursor: pointer; text-decoration: underline; font-family: inherit; }
+</style>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-auth">
+
+<div class="bg-circle bg-c1"></div>
+<div class="bg-circle bg-c2"></div>
+<a href="index.html" class="back-site"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M20 12H4.5M10 6l-6 6 6 6"/></g></svg> Back to Website</a>
+
+<div class="login-card">
+
+  <div class="login-logo">
+    <div class="login-crest logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+    <div class="login-school">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+    <div class="login-sub" id="login-sub-text">VIFF Portal — Secure Login</div>
+  </div>
+
+  <!-- 4 role tabs only — Super Admin is handled by the backend -->
+  <div class="role-tabs">
+    <button class="role-tab active" onclick="switchRole('student',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v4.5c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5V11"/></g></svg> Student</button>
+    <button class="role-tab"        onclick="switchRole('parent',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg>‍<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg>‍<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg> Parent</button>
+    <button class="role-tab"        onclick="switchRole('teacher',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 6.5c-2-1.5-5-2-8-1.5v12.5c3-.5 6 0 8 1.5c2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v12.5"/></g></svg> Teacher</button>
+    <button class="role-tab"        onclick="switchRole('admin',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3 12h2.2M18.8 12H21M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></g></svg> Admin</button>
+  </div>
+
+  <div id="alert-box" class="alert-box">Invalid credentials. Please try again.</div>
+
+  <form id="login-form" novalidate>
+
+    <!-- STUDENT: logs in with Student ID -->
+    <div class="student-only" style="display:block;">
+      <div class="form-group">
+        <label>Student ID / Admission Number</label>
+        <input type="text" id="student-id" placeholder="e.g. VIFF/2025/0042"/>
+      </div>
+    </div>
+
+    <!-- PARENT: logs in with email -->
+    <div class="parent-only">
+      <div class="form-group">
+        <label>Parent / Guardian Email</label>
+        <input type="email" id="parent-email" placeholder="parent@email.com"/>
+      </div>
+    </div>
+
+    <!-- TEACHER: logs in with Staff ID or email -->
+    <div class="teacher-only">
+      <div class="form-group">
+        <label>Staff ID / Email</label>
+        <input type="text" id="teacher-id" placeholder="Staff ID or email address"/>
+      </div>
+    </div>
+
+    <!-- ADMIN: logs in with email -->
+    <!-- Super Admin also uses this tab — backend detects the role from the database -->
+    <div class="admin-only">
+      <div class="form-group">
+        <label>Admin Email</label>
+        <input type="email" id="admin-email" placeholder="admin@viffacademy.edu.ng"/>
+      </div>
+    </div>
+
+    <!-- PASSWORD — same field for all roles -->
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <input type="password" id="pw-field" placeholder="Enter your password"/>
+        <button type="button" class="toggle-pw" onclick="togglePw()"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></svg></button>
+      </div>
+    </div>
+
+    <div class="forgot-link"><a href="forgot-password.html">Forgot password?</a></div>
+    <button type="submit" class="btn-login" id="login-btn">Sign In <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg></button>
+
+  </form>
+  <!-- DEMO LOGINS (click a row to fill the form) -->
+  <div id="demo-logins" style="margin-top:1.4rem;border:1.5px dashed rgba(29,78,216,.45);background:#f5f6fd;border-radius:12px;padding:12px 14px;">
+    <div style="font-weight:700;font-size:.8rem;color:#0b1f5c;margin-bottom:6px;">Demo logins <span style="font-weight:500;color:#4a5370;">— tap one to fill the form</span></div>
+    <div id="demo-rows"></div>
+  </div>
+  <script>
+  (function(){
+    var rows=[['Admin','admin','admin@viffacademy.edu.ng','Admin@123'],['Super Admin','admin','super@viffacademy.edu.ng','Super@123'],
+      ['Teacher','teacher','teacher@viffacademy.edu.ng','Teacher@123'],['Parent','parent','parent@demo.com','Parent@123'],['Student','student','VIFF/2025/0001','Student@123']];
+    var tabs={student:0,parent:1,teacher:2,admin:3}, box=document.getElementById('demo-rows');
+    rows.forEach(function(r){
+      var d=document.createElement('div');
+      d.style.cssText='padding:8px 8px;border-radius:8px;cursor:pointer;font-size:.8rem;color:#333;border-bottom:1px solid #e8eaf3;';
+      d.onmouseenter=function(){d.style.background='#f1f9e2'}; d.onmouseleave=function(){d.style.background=''};
+      d.innerHTML='<b style="color:#0b1f5c">'+r[0]+'</b><div style="word-break:break-all">'+r[2]+' &nbsp;·&nbsp; <code style="color:#7a5800">'+r[3]+'</code></div>';
+      d.onclick=function(){
+        switchRole(r[1],document.querySelectorAll('.role-tab')[tabs[r[1]]]);
+        document.getElementById({student:'student-id',parent:'parent-email',teacher:'teacher-id',admin:'admin-email'}[r[1]]).value=r[2];
+        var pw=document.getElementById('pw-field'); pw.value=r[3]; pw.type='text';
+      };
+      box.appendChild(d);
+    });
+  })();
+  </script>
+
+
+  <div class="login-footer">
+    <div style="margin-bottom:.5rem;">Students: <a href="admission.html">Apply for Admission <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg></a></div>
+    <div>Having trouble? <a href="contact.html">Contact Admin</a></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+var currentRole = 'student';
+
+/* ── Switch between role tabs ── */
+function switchRole(role, btn) {
+  currentRole = role;
+
+  // Highlight the clicked tab
+  document.querySelectorAll('.role-tab').forEach(function(t) {
+    t.classList.remove('active');
+  });
+  btn.classList.add('active');
+
+  // Hide all role-specific input sections
+  ['student','parent','teacher','admin'].forEach(function(r) {
+    var el = document.querySelector('.' + r + '-only');
+    if (el) el.style.display = 'none';
+  });
+
+  // Show the one that matches the clicked role
+  var section = document.querySelector('.' + role + '-only');
+  if (section) section.style.display = 'block';
+
+  // Update the subtitle under the school name
+  var subtitles = {
+    student: 'Student Portal Login',
+    parent:  'Parent / Guardian Login',
+    teacher: 'Teacher Portal Login',
+    admin:   'Admin Portal Login'
+  };
+  document.getElementById('login-sub-text').textContent = subtitles[role];
+
+  // Clear error messages and reset password field
+  document.getElementById('alert-box').classList.remove('show');
+  document.getElementById('pw-field').value = '';
+}
+
+/* ── Show / hide password ── */
+function togglePw() {
+  var f = document.getElementById('pw-field');
+  f.type = (f.type === 'password') ? 'text' : 'password';
+}
+
+/* ── Live password policy checker ──
+   Runs every time the user types in the password field.
+   Login no longer needs a client-side password format check — Supabase
+   Auth verifies the password server-side, so we just try to sign in with
+   whatever was typed and show its response.
+*/
+
+/* ── Form submit ── */
+document.getElementById('login-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  var pw = document.getElementById('pw-field').value;
+
+  if (!pw) {
+    showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Please enter your password.');
+    return;
+  }
+
+  // Get the identifier based on which role tab is active
+  var identifier = '';
+  if      (currentRole === 'student') identifier = document.getElementById('student-id').value.trim();
+  else if (currentRole === 'parent')  identifier = document.getElementById('parent-email').value.trim();
+  else if (currentRole === 'teacher') identifier = document.getElementById('teacher-id').value.trim();
+  else if (currentRole === 'admin')   identifier = document.getElementById('admin-email').value.trim();
+
+  if (!identifier) {
+    showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Please enter your ID or email address.');
+    return;
+  }
+
+  var btn = document.getElementById('login-btn');
+  btn.textContent = 'Signing in…';
+  btn.disabled    = true;
+
+  // Direct Supabase call — no Express server in between.
+  var result = await supabaseLogin(identifier, pw);
+
+  btn.innerHTML = 'Sign In <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg>';
+  btn.disabled    = false;
+
+  if (!result.ok) {
+    showToast('<svg class="icon icon-danger" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></svg> ' + result.message);
+    return;
+  }
+
+  // Two-factor step — admin and superadmin accounts only. Students,
+  // parents and teachers never reach this code. An admin who has NOT
+  // turned on two-factor login is not asked for anything and goes
+  // straight through, exactly as before.
+  if (result.profile.role === 'admin' || result.profile.role === 'superadmin') {
+    var mfaOk = await completeMfaIfNeeded();
+    if (!mfaOk) return;
+  }
+
+  // Login was successful — redirect based on the ACTUAL role from the
+  // database, not which tab was selected (the Admin tab covers both
+  // admin and superadmin accounts).
+  var userRole = result.profile.role;
+
+  if      (userRole === 'student')    window.location.href = 'dashboard-student.html';
+  else if (userRole === 'parent')     window.location.href = 'dashboard-parent.html';
+  else if (userRole === 'teacher')    window.location.href = 'dashboard-teacher.html';
+  else if (userRole === 'admin')      window.location.href = 'dashboard-admin.html';
+  else if (userRole === 'superadmin') window.location.href = 'dashboard-admin.html';
+  else    showToast(' Unknown role. Contact the admin.');
+});
+
+/* ── Two-factor step (admin / superadmin) ──
+   Uses Supabase Auth's built-in TOTP support — nothing here checks a
+   code itself. The backend independently refuses an enrolled admin's
+   requests until this step is completed, so this page is the friendly
+   front door, not the lock.
+
+   If Supabase can't tell us whether a second step is needed (network
+   hiccup, etc.) we let the admin continue: an admin who ISN'T enrolled
+   must never be locked out by a failed status check, and an admin who
+   IS enrolled is stopped by the backend regardless. */
+async function completeMfaIfNeeded() {
+  try {
+    var level = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (level.error || !level.data) return true;
+    if (level.data.nextLevel !== 'aal2' || level.data.currentLevel === 'aal2') return true;
+
+    var factors = await supabase.auth.mfa.listFactors();
+    var totp = factors.data && factors.data.totp && factors.data.totp.filter(function (f) { return f.status === 'verified'; })[0];
+    if (!totp) return true;
+
+    return await promptForMfaCode(totp.id);
+  } catch (err) {
+    console.warn('Two-factor status check failed; continuing:', err);
+    return true;
+  }
+}
+
+// Shows a small code-entry box. Resolves true once Supabase accepts the
+// code; resolves false if the person cancels (and signs them out, so no
+// half-finished password-only session is left behind).
+function promptForMfaCode(factorId) {
+  return new Promise(function (resolve) {
+    function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text) n.textContent = text; return n; }
+
+    var overlay = el('div', 'mfa-overlay');
+    var box = el('div', 'mfa-box');
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'mfa-title');
+    var title = el('h2', 'mfa-title', 'Two-factor verification'); title.id = 'mfa-title';
+    var help = el('p', 'mfa-help', 'Open your authenticator app and enter the 6-digit code for this account.');
+    var input = el('input', 'mfa-input');
+    input.type = 'text'; input.inputMode = 'numeric'; input.autocomplete = 'one-time-code'; input.maxLength = 6; input.placeholder = '123456';
+    input.setAttribute('aria-label', '6-digit code');
+    var error = el('p', 'mfa-error'); error.setAttribute('role', 'alert');
+    var verify = el('button', 'mfa-btn', 'Verify'); verify.type = 'button';
+    var cancel = el('button', 'mfa-cancel', 'Cancel and sign out'); cancel.type = 'button';
+    box.appendChild(title); box.appendChild(help); box.appendChild(input); box.appendChild(error); box.appendChild(verify); box.appendChild(cancel);
+    overlay.appendChild(box); document.body.appendChild(overlay);
+    input.focus();
+
+    var busy = false;
+    async function submit() {
+      if (busy) return;
+      var code = input.value.replace(/\s+/g, '');
+      if (!/^\d{6}$/.test(code)) { error.textContent = 'Enter the 6 digits from your authenticator app.'; return; }
+      busy = true; verify.disabled = true; error.textContent = '';
+      try {
+        var res = await supabase.auth.mfa.challengeAndVerify({ factorId: factorId, code: code });
+        if (res.error) {
+          error.textContent = 'That code is not right, or it has expired. Try the newest code.';
+          input.value = ''; input.focus();
+        } else {
+          overlay.remove(); resolve(true); return;
+        }
+      } catch (e) {
+        error.textContent = 'Could not check the code. Please try again.';
+      }
+      busy = false; verify.disabled = false;
+    }
+    verify.addEventListener('click', submit);
+    input.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); submit(); } });
+    cancel.addEventListener('click', async function () {
+      overlay.remove();
+      try { await supabase.auth.signOut(); } catch (e) { /* nothing to clean up */ }
+      resolve(false);
+    });
+  });
+}
+
+// Sent here by the rest of the site when a signed-in admin turned out
+// not to have finished the code step.
+(function () {
+  if (new URLSearchParams(window.location.search).get('reason') === 'mfa') {
+    window.addEventListener('load', function () {
+      showToast('Please sign in again and enter your two-factor code to continue.');
+    });
+  }
+})();
+
+/* ── Toast notification ── */
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.innerHTML = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+</script>
+</body>
+</html>

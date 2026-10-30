@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Results Checker – VIFF FOUNDATION INTERNATIONAL ACADEMY</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .results-page-hero {
+      background: linear-gradient(155deg,#071428 0%,#0b1f5c 50%,#112070 100%);
+      padding:5.5rem 2rem 4.5rem; text-align:center; color:var(--white);
+      position:relative; overflow:hidden;
+    }
+    .results-page-hero::before {
+      content:''; position:absolute; inset:0;
+      background:repeating-linear-gradient(-45deg,transparent,transparent 30px,rgba(141,198,63,.04) 30px,rgba(141,198,63,.04) 31px);
+    }
+    .results-page-hero::after {
+      content:'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg>'; position:absolute; right:5%; top:50%; transform:translateY(-50%);
+      font-size:12rem; opacity:.04; pointer-events:none;
+    }
+    .results-hero-inner { position:relative; z-index:2; max-width:680px; margin:0 auto; }
+
+    /* CHECKER CARD */
+    .checker-wrap { max-width:600px; margin:-3rem auto 0; position:relative; z-index:10; padding:0 1rem; }
+    .coupon-box {
+      background:var(--white); border-radius:22px;
+      padding:2.75rem; box-shadow:0 24px 70px rgba(0,0,0,.22);
+      border:1px solid rgba(141,198,63,.25);
+    }
+    body.dark .coupon-box { background:#161b22; }
+    .coupon-box::before {
+      content:''; position:absolute; top:0; left:10%; right:10%;
+      height:3px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      border-radius:0 0 4px 4px;
+    }
+    .coupon-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.6rem; font-weight:700; color:var(--royal);
+      text-align:center; margin-bottom:.4rem;
+    }
+    body.dark .coupon-title { color:var(--gold-light); }
+    .coupon-sub { text-align:center; color:var(--muted); font-size:.87rem; margin-bottom:1.75rem; }
+
+    .coupon-input-wrap { display:flex; gap:.75rem; align-items:stretch; }
+    .coupon-input-wrap input {
+      font-size:1.1rem; font-weight:700; letter-spacing:.22em;
+      text-align:center; text-transform:uppercase;
+      border:2px solid var(--border); flex:1;
+      padding:15px 16px; border-radius:10px;
+    }
+    .coupon-input-wrap input::placeholder { letter-spacing:.06em; font-weight:400; font-size:.88rem; text-transform:none; }
+    .coupon-input-wrap input:focus { border-color:var(--gold); }
+    .coupon-input-wrap button { padding:15px 22px; border-radius:10px; }
+
+    .coupon-note {
+      display:flex; align-items:center; gap:8px;
+      background:rgba(141,198,63,.08); border:1px solid rgba(141,198,63,.25);
+      border-radius:10px; padding:12px 16px; margin-top:1.25rem;
+      font-size:.81rem; color:var(--royal); line-height:1.5;
+    }
+    body.dark .coupon-note { color:var(--gold-light); }
+
+    #coupon-error {
+      display:none; margin-top:1rem;
+      background:rgba(220,38,38,.08); border:1px solid rgba(220,38,38,.25);
+      color:#b91c1c; border-radius:10px; padding:12px 16px; font-size:.85rem;
+    }
+    body.dark #coupon-error { color:#fca5a5; }
+
+    #result-preview { margin-top:1.5rem; }
+
+    /* HOW IT WORKS */
+    .hiw-section { padding:5rem 2rem; }
+    .hiw-inner { max-width:960px; margin:0 auto; }
+
+    /* ADMIN INFO CARD */
+    .admin-card {
+      background:linear-gradient(135deg,#fffbef,#fff8e0);
+      border:1.5px solid rgba(141,198,63,.3); border-radius:16px;
+      padding:2rem; max-width:700px; margin:0 auto;
+    }
+    body.dark .admin-card { background:#1a1a0e; }
+    .admin-card h3 { font-family:'Cormorant Garamond',serif; font-size:1.3rem; color:var(--royal); margin-bottom:1rem; }
+    body.dark .admin-card h3 { color:var(--gold-light); }
+    .admin-steps { list-style:none; counter-reset:step; }
+    .admin-steps li {
+      counter-increment:step;
+      display:flex; align-items:flex-start; gap:14px;
+      padding:.75rem 0; border-bottom:1px dashed rgba(141,198,63,.25);
+      font-size:.88rem; color:var(--royal); line-height:1.6;
+    }
+    body.dark .admin-steps li { color:#d1d5db; }
+    .admin-steps li:last-child { border-bottom:none; }
+    .admin-steps li::before {
+      content:counter(step); width:28px; height:28px; border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      color:var(--royal); font-size:.8rem; font-weight:700;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    }
+
+    /* DEMO TIP */
+    .demo-tip {
+      background:linear-gradient(135deg,rgba(11,31,69,.06),rgba(141,198,63,.08));
+      border:1px dashed rgba(141,198,63,.4); border-radius:12px;
+      padding:1rem 1.25rem; margin-top:1.25rem; font-size:.82rem; color:var(--muted);
+      text-align:center; line-height:1.6;
+    }
+    body.dark .demo-tip { color:#9ca3af; }
+    .demo-tip code {
+      background:rgba(141,198,63,.15); color:var(--gold);
+      padding:2px 8px; border-radius:5px; font-weight:700; letter-spacing:.1em;
+    }
+  </style>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-results">
+
+<div id="announce-bar"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-crest logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+      <div class="logo-text">
+        <div class="logo-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+        <div class="logo-abbr">VIFF · Lokogoma, Abuja</div>
+      </div>
+    </a>
+    <nav id="main-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="events.html">Events</a>
+      <a href="admission.html">Admission</a>
+      <a href="results.html" class="active">Check Results</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-results">Portal Login</a>
+    </nav>
+    <div id="hamburger" class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="results-page-hero">
+  <div class="results-hero-inner">
+    <div class="hero-badge fade-up" style="margin-bottom:1.25rem;"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg> VIFF Online Results Portal</div>
+    <h1 class="fade-up d1" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:.9rem;">
+      Check Your <em>Term Results</em><br>Securely Online
+    </h1>
+    <p class="fade-up d2" style="color:rgba(255,255,255,.68);font-size:.97rem;max-width:500px;margin:0 auto;line-height:1.75;">
+      Enter the coupon code you purchased from the school admin office to instantly view your academic results.
+    </p>
+  </div>
+</section>
+
+<!-- COUPON CHECKER CARD -->
+<div class="checker-wrap">
+  <div class="coupon-box">
+    <div class="coupon-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></g></svg> Enter Your Coupon Code</div>
+    <p class="coupon-sub">Your unique code was issued by the school admin office after payment.</p>
+
+    <form id="results-form" novalidate>
+      <div class="coupon-input-wrap">
+        <input type="text" id="coupon-code" maxlength="20"
+               placeholder="e.g. VIFF-2024-XXXX"
+               autocomplete="off" spellcheck="false"/>
+        <button type="submit" class="btn btn-gold"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="10.5" cy="10.5" r="6.5"/><path d="M19.5 19.5L15.2 15.2"/></g></svg> Check</button>
+      </div>
+    </form>
+
+    <div class="coupon-note">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></g></svg> <span>Your result is private and secure. Each coupon code can only be used once. Contact the school admin if you have issues: <strong>Emerald Garden Estate, Dakwo District, Lokogoma, Abuja</strong>.</span>
+    </div>
+
+    <div id="coupon-error"></div>
+
+    <!-- RESULT DISPLAY (populated by JS) -->
+    <div id="result-preview" class="result-preview"></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-section">
+  <div class="hiw-inner">
+    <div style="text-align:center;margin-bottom:3rem;">
+      <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+      <h2 class="section-title" style="text-align:center;">3 Simple Steps to<br>View Your Results</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card scroll-reveal">
+        <div class="step-num">1</div>
+        <h4>Visit the Admin Office</h4>
+        <p>Go to the VIFF admin office at Emerald Garden Estate, Dakwo District, Lokogoma, and make payment for a result coupon code.</p>
+      </div>
+      <div class="step-card scroll-reveal">
+        <div class="step-num">2</div>
+        <h4>Collect Your Code</h4>
+        <p>The admin will generate and hand you a unique coupon code — keep it safe and confidential.</p>
+      </div>
+      <div class="step-card scroll-reveal">
+        <div class="step-num">3</div>
+        <h4>Enter Code &amp; View Results</h4>
+        <p>Come back to this page, enter your code above, and instantly view your complete term results.</p>
+      </div>
+    </div>
+
+    <!-- ADMIN INFO -->
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div class="section-eyebrow" style="justify-content:center;">For Admin</div>
+      <h2 class="section-title" style="text-align:center;margin-bottom:1.5rem;">How Coupon Codes Work</h2>
+    </div>
+    <div class="admin-card scroll-reveal">
+      <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="8" cy="14.5" r="3.5"/><path d="M10.5 12L18 4.5M15.5 7L18 9.5M13 9.5L15 11.5"/></g></svg> Admin Coupon Code System</h3>
+      <ul class="admin-steps">
+        <li>Students pay for a coupon code at the admin or bursar's office (fee set by school management).</li>
+        <li>The admin logs into the <strong>admin dashboard</strong> (backend — coming soon) and generates a unique code tied to that student's result.</li>
+        <li>The code is printed or written and given to the student — each code is single-use only.</li>
+        <li>The student enters the code on this page to view their result securely.</li>
+        <li>Used codes are automatically invalidated after the result is displayed once.</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-top:3.5rem;">
+      <div class="section-eyebrow" style="justify-content:center;margin-bottom:.5rem;">FAQ</div>
+      <h2 class="section-title" style="text-align:center;margin-bottom:1.75rem;">Common Questions</h2>
+      <div style="max-width:700px;margin:0 auto;">
+        <div class="faq-item">
+          <div class="faq-question">What if I lose my coupon code? <span class="faq-arrow">▼</span></div>
+          <div class="faq-answer">Visit the admin office immediately. They can verify your identity and reissue a code or provide your result directly. A small reissue fee may apply.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I use the same code more than once? <span class="faq-arrow">▼</span></div>
+          <div class="faq-answer">No. Each coupon code is single-use only. Once your result has been displayed, the code is deactivated for security.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">My result shows wrong information. What do I do? <span class="faq-arrow">▼</span></div>
+          <div class="faq-answer">Please visit the school admin office with your result printout. All disputes must be reported within 2 weeks of the result release date.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How much does a coupon code cost? <span class="faq-arrow">▼</span></div>
+          <div class="faq-answer">The fee is set by school management and may vary by term. Please contact the admin office for current pricing.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is my result data secure? <span class="faq-arrow">▼</span></div>
+          <div class="faq-answer">Yes. Results are linked to unique encrypted codes and are only accessible via your personal code. No result can be accessed without the correct coupon.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+        <div class="footer-brand-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div><p class="motto-line">Godliness with Excellence</p>
+      </div>
+      <p>Raising godly, brilliant leaders of tomorrow. Faith · Excellence · Character.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="results.html">Results Checker</a>
+    </div>
+    <div class="footer-col">
+      <h4>Admin Office</h4>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Emerald Garden Estate, Dakwo District</p>
+      <p>Sunnyvale, Lokogoma, Abuja</p>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 4.5c1 0 2 .3 2.3 1.1l1 2.4c.3.7 0 1.6-.6 2.1l-1.1.9c1 2.5 3 4.5 5.5 5.5l.9-1.1c.5-.6 1.4-.9 2.1-.6l2.4 1c.8.3 1.1 1.3 1.1 2.3v1.6c0 1.2-1.1 2-2.3 1.8C10.5 20.4 3.6 13.5 2.6 6.8 2.4 5.6 3.2 4.5 4.4 4.5H6z"/></g></svg> +234 800 000 0000</p>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="contact.html">Report an Issue</a>
+      <a href="contact.html">Contact Admin</a>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2025 VIFF FOUNDATION INTERNATIONAL ACADEMY · SS1 ICT Term 2 Project</div>
+</footer>
+
+<div id="toast"></div>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  const form   = document.getElementById('results-form');
+  const input  = document.getElementById('coupon-code');
+  const errBox = document.getElementById('coupon-error');
+  const preview = document.getElementById('result-preview');
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalBtnHTML = submitBtn.innerHTML;
+
+  function escapeHTML(str) {
+    const d = document.createElement('div');
+    d.textContent = str == null ? '' : String(str);
+    return d.innerHTML;
+  }
+
+  function gradeColor(grade) {
+    if (grade === 'A') return 'var(--green,#16a34a)';
+    if (grade === 'F') return 'var(--red,#dc2626)';
+    return 'var(--gold)';
+  }
+
+  function renderResult(r) {
+    const subjectRows = (r.subjects || []).map(function (s) {
+      return '<tr>' +
+        '<td>' + escapeHTML(s.subject) + '</td>' +
+        '<td style="text-align:center;">' + escapeHTML(s.ca) + '</td>' +
+        '<td style="text-align:center;">' + escapeHTML(s.exam) + '</td>' +
+        '<td style="text-align:center;font-weight:600;">' + escapeHTML(s.total) + '</td>' +
+        '<td style="text-align:center;font-weight:700;color:' + gradeColor(s.grade) + ';">' + escapeHTML(s.grade) + '</td>' +
+        '</tr>';
+    }).join('');
+
+    preview.innerHTML =
+      '<div style="border:1.5px solid rgba(141,198,63,.3);border-radius:16px;padding:1.75rem;margin-top:.25rem;">' +
+        '<div style="text-align:center;margin-bottom:1.25rem;">' +
+          '<div style="font-size:1.5rem;font-weight:700;color:var(--royal);">' + escapeHTML(r.student_name) + '</div>' +
+          '<div style="color:var(--muted);font-size:.85rem;">' + escapeHTML(r.class_name) + ' &middot; ' + escapeHTML(r.term) + ' Term &middot; ' + escapeHTML(r.session) + '</div>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:center;gap:2.5rem;margin-bottom:1.5rem;flex-wrap:wrap;">' +
+          '<div style="text-align:center;"><div style="font-size:1.6rem;font-weight:700;color:var(--royal);">' + escapeHTML(r.average) + '%</div><div style="font-size:.75rem;color:var(--muted);">Average</div></div>' +
+          '<div style="text-align:center;"><div style="font-size:1.6rem;font-weight:700;color:' + gradeColor(r.overall_grade) + ';">' + escapeHTML(r.overall_grade) + '</div><div style="font-size:.75rem;color:var(--muted);">Overall Grade</div></div>' +
+          '<div style="text-align:center;"><div style="font-size:1.6rem;font-weight:700;color:var(--royal);">' + escapeHTML(r.position) + (r.total_students ? ' / ' + escapeHTML(r.total_students) : '') + '</div><div style="font-size:.75rem;color:var(--muted);">Position</div></div>' +
+        '</div>' +
+        (subjectRows ? '<table style="width:100%;border-collapse:collapse;font-size:.85rem;">' +
+          '<thead><tr style="border-bottom:2px solid rgba(141,198,63,.3);">' +
+            '<th style="text-align:left;padding:.5rem;">Subject</th><th style="padding:.5rem;">CA</th><th style="padding:.5rem;">Exam</th><th style="padding:.5rem;">Total</th><th style="padding:.5rem;">Grade</th>' +
+          '</tr></thead><tbody>' + subjectRows + '</tbody></table>' : '') +
+        (r.principal_remark ? '<div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px dashed rgba(141,198,63,.3);font-size:.85rem;color:var(--royal);"><strong>Principal\'s Remark:</strong> ' + escapeHTML(r.principal_remark) + '</div>' : '') +
+      '</div>';
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    preview.innerHTML = '';
+
+    const code = input.value.trim().toUpperCase();
+    if (!code) {
+      errBox.textContent = 'Please enter your coupon code.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<svg class="icon icon-spin" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7"/></g></svg> Checking&hellip;';
+
+    try {
+      const { data, error } = await supabase.rpc('verify_pin', { p_code: code });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!row) throw new Error('Invalid or already-used coupon code.');
+      renderResult(row);
+      input.value = '';
+    } catch (err) {
+      errBox.textContent = (err && err.message) || 'Something went wrong. Please try again.';
+      errBox.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHTML;
+    }
+  });
+})();
+</script>
+</body>
+</html>

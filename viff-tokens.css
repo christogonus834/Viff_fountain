@@ -1,0 +1,12 @@
+/* viff-tokens.css — the one set of design tokens shared by the public pages, the sign-in pages and every dashboard.
+   Same values as the home page (index.html). --royal and --gold are still overridden by Admin > Site Settings. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+:root{
+  --ac1:#1d4ed8; --ac2:#8dc63f; --ac2d:#3d8f2f;
+  --grad:linear-gradient(135deg,#1d4ed8,#2f6df0);                 /* buttons, crests */
+  --grad2:linear-gradient(135deg,#1d4ed8,#3d8f2f);                /* big bands: royal blue into green */
+  --ink:#1b2236; --soft:#f5f6fd; --line:#e8eaf3;
+  --r-card:18px; --r-ctl:12px;
+  --font:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --glow:0 10px 24px rgba(29,78,216,.28);
+}

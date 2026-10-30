@@ -1,0 +1,47 @@
+/* Student Management + Finance Management screens (loaded after tfis-ui.css). Prefix: am- */
+body.ui2 .am-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 16px; border-bottom: 1px solid var(--ui-line, #e5e9f2); }
+body.ui2 .am-tab { appearance: none; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px; font: inherit; font-weight: 700; color: var(--ui-muted, #5b6478); cursor: pointer; border-radius: 8px 8px 0 0; }
+body.ui2 .am-tab:hover { color: var(--ui-navy, #0b1f5c); background: #f5f7fb; }
+body.ui2 .am-tab[aria-selected="true"] { color: var(--ui-navy, #0b1f5c); border-bottom-color: var(--ui-gold, #8dc63f); }
+body.ui2 .am-tab .am-count { margin-left: 6px; background: #fde4e4; color: #b91c1c; border-radius: 999px; padding: 1px 8px; font-size: .72rem; }
+body.ui2 .am-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+body.ui2 .am-toolbar .am-grow { flex: 1 1 220px; min-width: 160px; }
+body.ui2 .am-input, body.ui2 .am-select, body.ui2 .am-textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #dfe3ea; border-radius: 10px; background: #fff; font: inherit; color: inherit; }
+body.ui2 .am-input:focus, body.ui2 .am-select:focus, body.ui2 .am-textarea:focus { outline: none; border-color: var(--ui-gold, #8dc63f); box-shadow: 0 0 0 3px rgba(141,198,63,.18); }
+body.ui2 .am-toolbar .am-select, body.ui2 .am-toolbar .am-input { width: auto; }
+body.ui2 .am-toolbar .am-grow .am-input { width: 100%; }
+body.ui2 .am-btn { appearance: none; border: 1.5px solid transparent; border-radius: 10px; padding: 9px 14px; font: inherit; font-weight: 700; font-size: .86rem; cursor: pointer; background: #eef0f5; color: var(--ui-navy, #0b1f5c); }
+body.ui2 .am-btn:hover { filter: brightness(.96); }
+body.ui2 .am-btn:disabled { opacity: .55; cursor: not-allowed; }
+body.ui2 .am-btn.gold { background: linear-gradient(135deg, #8dc63f, #e8c46a); }
+body.ui2 .am-btn.line { background: #fff; border-color: #dfe3ea; }
+body.ui2 .am-btn.red { background: #dc2626; color: #fff; }
+body.ui2 .am-btn.green { background: #16a34a; color: #fff; }
+body.ui2 .am-btn.sm { padding: 6px 11px; font-size: .8rem; }
+body.ui2 .am-row-btn { cursor: pointer; }
+body.ui2 .am-row-btn:hover td { background: #fbfcff; }
+body.ui2 .am-muted { color: var(--ui-muted, #5b6478); font-size: .8rem; }
+body.ui2 .am-num { text-align: right; font-variant-numeric: tabular-nums; }
+body.ui2 .am-in { color: #15803d; font-weight: 700; } body.ui2 .am-out { color: #b91c1c; font-weight: 700; }
+body.ui2 .am-voided { opacity: .55; text-decoration: line-through; }
+body.ui2 .am-cards { display: grid; gap: 12px; }
+body.ui2 .am-app { border: 1px solid var(--ui-line, #e5e9f2); border-radius: 14px; padding: 14px 16px; background: #fff; display: grid; gap: 8px; }
+body.ui2 .am-app-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+body.ui2 .am-kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 6px 16px; font-size: .88rem; }
+body.ui2 .am-kv b { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ui-muted, #5b6478); }
+body.ui2 .am-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+body.ui2 .am-overlay { position: fixed; inset: 0; background: rgba(11,31,69,.55); display: flex; align-items: center; justify-content: center; padding: 14px; z-index: 9000; }
+body.ui2 .am-modal { background: #fff; border-radius: 16px; width: 100%; max-width: 560px; max-height: 92vh; overflow: auto; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+body.ui2 .am-modal-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--ui-line, #e5e9f2); position: sticky; top: 0; background: #fff; }
+body.ui2 .am-modal-head h3 { margin: 0; font-size: 1.05rem; color: var(--ui-navy, #0b1f5c); }
+body.ui2 .am-x { appearance: none; border: 0; background: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: var(--ui-muted, #5b6478); }
+body.ui2 .am-modal-body { padding: 16px 18px 18px; display: grid; gap: 12px; }
+body.ui2 .am-field label { display: block; font-size: .78rem; font-weight: 700; color: var(--ui-navy, #0b1f5c); margin-bottom: 5px; }
+body.ui2 .am-field .am-hint { margin-top: 4px; font-size: .76rem; color: var(--ui-muted, #5b6478); }
+body.ui2 .am-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+body.ui2 .am-err { color: #b91c1c; font-size: .84rem; font-weight: 600; min-height: 1.1em; }
+body.ui2 .am-cred { background: #fffaf0; border: 1.5px dashed #8dc63f; border-radius: 12px; padding: 12px 14px; font-size: .9rem; display: grid; gap: 6px; }
+body.ui2 .am-cred code { background: #fff; border: 1px solid #eadfbf; border-radius: 6px; padding: 2px 8px; font-weight: 700; user-select: all; }
+body.ui2 .am-check { width: 18px; height: 18px; accent-color: #0b1f5c; }
+@media (max-width: 640px) { body.ui2 .am-grid2 { grid-template-columns: 1fr; } body.ui2 .am-toolbar .am-select, body.ui2 .am-toolbar .am-input { width: 100%; } }
+@media print { body.ui2 .sidebar, body.ui2 .topbar, body.ui2 .am-toolbar, body.ui2 .am-tabs, body.ui2 .am-noprint { display: none !important; } body.ui2 .main { margin: 0 !important; } }

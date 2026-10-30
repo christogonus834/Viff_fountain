@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Events – VIFF FOUNDATION INTERNATIONAL ACADEMY</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+.event-card{background:var(--white);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:transform .25s,box-shadow .25s;}
+.event-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.event-card-top{height:8px;}
+.event-card-top.academic{background:linear-gradient(90deg,#dc2626,#f87171);}
+.event-card-top.sports{background:linear-gradient(90deg,#ea580c,#fb923c);}
+.event-card-top.faith{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.event-card-top.meeting{background:linear-gradient(90deg,#2563eb,#60a5fa);}
+.event-card-top.celebration{background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.event-card-top.past{background:linear-gradient(90deg,#9ca3af,#d1d5db);}
+.event-card-body{padding:1.5rem;}
+.event-card-date{font-family:'Cormorant Garamond',serif;font-size:.78rem;color:var(--gold);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;}
+.event-card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--royal);margin-bottom:.6rem;line-height:1.3;}
+.event-card-desc{font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
+.event-card-meta{display:flex;flex-wrap:wrap;gap:.6rem;}
+.event-meta-tag{display:flex;align-items:center;gap:5px;font-size:.78rem;color:var(--muted);}
+
+/* Category filter */
+.filter-bar{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.filter-btn{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;}
+.filter-btn:hover,.filter-btn.active{background:var(--royal);color:var(--gold);border-color:var(--royal);}
+
+/* Calendar grid */
+.public-cal{max-width:460px;}
+.public-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.p-cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:.83rem;cursor:default;color:var(--text);}
+.p-cal-day.today{background:var(--gold);color:var(--royal);font-weight:700;}
+.p-cal-day.has-event{background:var(--royal);color:var(--white);font-weight:600;cursor:pointer;}
+.p-cal-day.has-event:hover{background:var(--blue-glow);}
+.p-cal-day.other-month{color:var(--border);}
+.p-cal-day-name{text-align:center;font-size:.66rem;color:var(--muted);text-transform:uppercase;font-weight:600;padding-bottom:4px;}
+</style>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-events">
+<div id="announce-bar"></div>
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-crest logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+      <div class="logo-text">
+        <div class="logo-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+        <div class="logo-abbr">VIFF · Lokogoma, Abuja</div>
+      </div>
+    </a>
+    <nav id="main-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="events.html" class="active">Events</a>
+      <a href="admission.html">Admission</a>
+      <a href="results.html">Check Results</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-results">Portal Login</a>
+    </nav>
+    <div id="hamburger" class="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<section class="hero" style="padding:4.5rem 2rem 4rem;">
+  <div class="hero-stripe"></div>
+  <div class="hero-inner">
+    <div class="hero-badge fade-up"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg> School Life</div>
+    <h1 class="fade-up d1">Events, Calendar &<br><em>School Activities</em></h1>
+    <p class="hero-sub fade-up d2">Stay up to date with everything happening at VIFF FOUNDATION INTERNATIONAL ACADEMY — from academic events to sports, faith activities, and celebrations.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- FILTERS -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterEvents('all',this)">All Events</button>
+      <button class="filter-btn" onclick="filterEvents('upcoming',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Upcoming</button>
+      <button class="filter-btn" onclick="filterEvents('academic',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 6.5c-2-1.5-5-2-8-1.5v12.5c3-.5 6 0 8 1.5c2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v12.5"/></g></svg> Academic</button>
+      <button class="filter-btn" onclick="filterEvents('sports',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5c3 3 3 13.5 0 17M4 9c4 1.5 12 1.5 16 0M4 15c4-1.5 12-1.5 16 0"/></g></svg> Sports</button>
+      <button class="filter-btn" onclick="filterEvents('faith',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2.5v19M6.5 9h11"/></g></svg> Faith</button>
+      <button class="filter-btn" onclick="filterEvents('meeting',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="9" cy="8.5" r="3"/><path d="M3.5 20c.8-3.5 3-5.5 5.5-5.5s4.7 2 5.5 5.5"/><circle cx="17" cy="9.5" r="2.3"/><path d="M15.3 14.3c2 .2 3.5 1.8 4.2 5"/></g></svg> Meetings</button>
+      <button class="filter-btn" onclick="filterEvents('past',this)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="4" width="17" height="4.5" rx="1"/><rect x="4.5" y="8.5" width="15" height="11" rx="1"/><path d="M10 13h4"/></g></svg> Past Events</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start;">
+      <!-- EVENT CARDS -->
+      <div>
+        <div class="section-eyebrow">Upcoming</div>
+        <h2 class="section-title" style="margin-bottom:2rem;">What's Coming Up</h2>
+        <div class="events-grid" id="events-container">
+          <div class="event-card" data-cat="academic upcoming">
+            <div class="event-card-top academic"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Monday, March 24, 2025</div>
+              <div class="event-card-title">2nd Term Examinations Begin</div>
+              <div class="event-card-desc">All students are expected to be punctual and prepared. Exams run Monday to Friday for two weeks. See your class timetable for subject schedules.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Classrooms</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 7:30am daily</span>
+                <span class="badge badge-red" style="font-size:.72rem;">Academic</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="meeting upcoming">
+            <div class="event-card-top meeting"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Saturday, March 29, 2025</div>
+              <div class="event-card-title">PTA Meeting</div>
+              <div class="event-card-desc">The Parent-Teacher Association quarterly meeting. Agenda includes school fees update, academic performance review, and upcoming term plans. All parents are warmly invited.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Assembly Hall</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 9:00am – 12:00pm</span>
+                <span class="badge badge-blue" style="font-size:.72rem;">Meeting</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="academic upcoming">
+            <div class="event-card-top academic"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Saturday, April 5, 2025</div>
+              <div class="event-card-title">3rd Term Resumption</div>
+              <div class="event-card-desc">All students resume for the 3rd and final term of the 2024/2025 academic session. School fees must be paid on or before this date.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> School Premises</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 7:00am</span>
+                <span class="badge badge-green" style="font-size:.72rem;">Term</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="sports upcoming">
+            <div class="event-card-top sports"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Tuesday, April 15, 2025</div>
+              <div class="event-card-title">VIFF Inter-House Sports Day</div>
+              <div class="event-card-desc">The annual inter-house sports competition. Four houses compete across athletics, football, basketball, and relay races. Parents and guests are welcome to attend and cheer.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> School Sports Field</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 8:00am – 4:00pm</span>
+                <span class="badge badge-orange" style="font-size:.72rem;">Sports</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="faith upcoming">
+            <div class="event-card-top faith"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Sunday, May 25, 2025</div>
+              <div class="event-card-title">VIFF Annual Thanksgiving Service</div>
+              <div class="event-card-desc">A special thanksgiving service celebrating God's faithfulness over the 2024/2025 academic year. All students, parents, teachers, and staff are invited to worship together.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> School Chapel</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 9:00am</span>
+                <span class="badge badge-purple" style="font-size:.72rem;">Faith</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="celebration upcoming">
+            <div class="event-card-top celebration"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Friday, June 20, 2025</div>
+              <div class="event-card-title">VIFF Graduation & Prize-Giving Day</div>
+              <div class="event-card-desc">Annual graduation ceremony for SS3 & JS3 leavers. Academic prizes, cultural performances, and valedictory speech. A celebration of excellence and hard work.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> School Hall</span>
+                <span class="event-meta-tag"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> 10:00am</span>
+                <span class="badge badge-gold" style="font-size:.72rem;">Celebration</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAST EVENTS -->
+          <div class="event-card" data-cat="celebration past">
+            <div class="event-card-top past"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Friday, February 14, 2025 · Past</div>
+              <div class="event-card-title">Founder's Day Celebration</div>
+              <div class="event-card-desc">VIFF marked 20 years of excellence with a grand Founder's Day event. Notable alumni, parents, and community leaders were in attendance to celebrate the school's legacy.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon icon-success" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></g></svg> Completed</span>
+                <span class="badge badge-gray" style="font-size:.72rem;">Past</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="event-card" data-cat="academic past">
+            <div class="event-card-top past"></div>
+            <div class="event-card-body">
+              <div class="event-card-date"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> Thursday, November 10, 2024 · Past</div>
+              <div class="event-card-title">Cultural Day & Exhibition</div>
+              <div class="event-card-desc">Students showcased Nigeria's rich cultural heritage through traditional dances, attire, food, and art displays. A colourful celebration of identity and creativity.</div>
+              <div class="event-card-meta">
+                <span class="event-meta-tag"><svg class="icon icon-success" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></g></svg> Completed</span>
+                <span class="badge badge-gray" style="font-size:.72rem;">Past</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALENDAR SIDEBAR -->
+      <div style="position:sticky;top:90px;">
+        <div class="panel" style="box-shadow:var(--shadow-md);">
+          <div class="panel-header" style="border:none;padding-bottom:.5rem;"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> March 2025</span></div>
+          <div class="panel-body" style="padding-top:.5rem;">
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:.5rem;">
+              <div class="p-cal-day-name">S</div><div class="p-cal-day-name">M</div><div class="p-cal-day-name">T</div><div class="p-cal-day-name">W</div><div class="p-cal-day-name">T</div><div class="p-cal-day-name">F</div><div class="p-cal-day-name">S</div>
+            </div>
+            <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:1.25rem;">
+          <div class="panel-header"><span class="panel-title" style="font-size:1rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="8" cy="14.5" r="3.5"/><path d="M10.5 12L18 4.5M15.5 7L18 9.5M13 9.5L15 11.5"/></g></svg> Event Legend</span></div>
+          <div class="panel-body" style="padding-top:.75rem;">
+            <div style="display:flex;flex-direction:column;gap:.6rem;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:#dc2626;"></div>Academic</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:#ea580c;"></div>Sports</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:#7c3aed;"></div>Faith</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:#2563eb;"></div>Meetings</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:var(--ac1);"></div>Celebrations</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;"><div style="width:12px;height:12px;border-radius:3px;background:#9ca3af;"></div>Past Events</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:10px;"><div class="logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div><div class="footer-brand-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div><p class="motto-line">Godliness with Excellence</p></div>
+      <p>Raising godly, brilliant leaders of tomorrow.</p>
+    </div>
+    <div class="footer-col"><h4>Navigation</h4><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="admission.html">Admission</a><a href="results.html">Results</a></div>
+    <div class="footer-col"><h4>Address</h4><p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Emerald Garden Estate, Dakwo District, Sunnyvale, Lokogoma, Abuja</p><p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 4.5c1 0 2 .3 2.3 1.1l1 2.4c.3.7 0 1.6-.6 2.1l-1.1.9c1 2.5 3 4.5 5.5 5.5l.9-1.1c.5-.6 1.4-.9 2.1-.6l2.4 1c.8.3 1.1 1.3 1.1 2.3v1.6c0 1.2-1.1 2-2.3 1.8C10.5 20.4 3.6 13.5 2.6 6.8 2.4 5.6 3.2 4.5 4.4 4.5H6z"/></g></svg> +234 800 000 0000</p></div>
+    <div class="footer-col"><h4>Portals</h4><a href="login.html">Student Login</a><a href="login.html">Teacher Login</a><a href="login.html">Admin Login</a></div>
+  </div>
+  <div class="footer-bottom">&copy; 2025 VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+</footer>
+
+<div id="toast"></div>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<script src="script.js"></script>
+<script>
+// Filter events
+function filterEvents(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.event-card').forEach(card => {
+    if(cat==='all') card.style.display='';
+    else card.style.display = card.dataset.cat.includes(cat) ? '' : 'none';
+  });
+}
+
+// Build mini calendar
+const eventDays = [24,29];
+const grid = document.getElementById('cal-grid');
+const today = 6; // March 6
+const firstDay = 6; // March 1 2025 is Saturday (index 6)
+const daysInMonth = 31;
+// Empty cells before first day
+for(let i=0;i<firstDay;i++){
+  const d=document.createElement('div');d.className='p-cal-day other-month';
+  d.textContent=24+i;grid.appendChild(d);
+}
+for(let d=1;d<=daysInMonth;d++){
+  const el=document.createElement('div');
+  el.textContent=d;
+  let cls='p-cal-day';
+  if(d===today)cls+=' today';
+  else if(eventDays.includes(d))cls+=' has-event';
+  el.className=cls;
+  grid.appendChild(el);
+}
+</script>
+</body>
+</html>

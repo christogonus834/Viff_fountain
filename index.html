@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VIFF FOUNDATION INTERNATIONAL ACADEMY</title>
+<meta name="description" content="VIFF Foundation International Academy: faith, excellence and innovation. Apply online, check results and sign in to the student, parent and teacher portal."/>
+<meta name="theme-color" content="#0b1f5c"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --royal:#0b1f5c;           /* set from Admin > Site Settings (primary colour) */
+    --gold:#8dc63f;            /* set from Admin > Site Settings (accent colour) */
+    --ac1:#1d4ed8; --ac2:#8dc63f; --ac2d:#3d8f2f;
+    --grad:linear-gradient(135deg,#1d4ed8,#2f6df0);
+    --grad2:linear-gradient(135deg,#1d4ed8,#3d8f2f);
+    --ink:#1b2236; --muted:#6b7280; --soft:#f5f6fd; --line:#e8eaf3; --radius:18px;
+    --font:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:#fff;line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  img,svg{max-width:100%}
+  .wrap{width:min(1160px,100% - 40px);margin-inline:auto}
+  .skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 14px;border-radius:8px;z-index:100;font-weight:600}.skip:focus{left:8px}
+  :focus-visible{outline:3px solid var(--ac1);outline-offset:3px;border-radius:6px}
+  .icon{width:1.25em;height:1.25em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:-.2em}
+
+  /* ── header ── */
+  header.site{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:72px}
+  .logo{display:flex;align-items:center;gap:11px;min-width:0}
+  .logo-crest{width:42px;height:42px;border-radius:12px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;overflow:hidden}
+  .logo-name{font-weight:700;font-size:.78rem;line-height:1.2;letter-spacing:.01em;color:var(--royal);max-width:230px}
+  nav.main{display:flex;align-items:center;gap:6px}
+  nav.main a.l{padding:9px 13px;border-radius:10px;font-size:.88rem;font-weight:500;color:#394056}
+  nav.main a.l:hover,nav.main a.l[aria-current="page"]{background:var(--soft);color:var(--ac1)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:12px;font:inherit;font-weight:600;font-size:.9rem;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.primary{background:var(--grad);color:#fff;box-shadow:0 10px 24px rgba(29,78,216,.28)}
+  .btn.ghost{background:#fff;color:var(--royal);border:1.5px solid var(--line)}
+  .btn.sm{padding:9px 16px;font-size:.84rem}
+  .menu{display:none;background:none;border:1.5px solid var(--line);border-radius:10px;width:44px;height:44px;cursor:pointer;color:var(--royal)}
+  @media(max-width:900px){
+    .menu{display:inline-flex;align-items:center;justify-content:center}
+    nav.main{position:absolute;left:0;right:0;top:72px;background:#fff;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;padding:12px 20px 18px;display:none;box-shadow:0 18px 30px rgba(11,31,69,.08)}
+    nav.main.open{display:flex}
+    nav.main a.l{padding:12px 10px}
+    nav.main .btn{width:100%}
+  }
+
+  /* ── hero ── */
+  .hero{padding:56px 0 70px;background:radial-gradient(900px 400px at 85% 10%,rgba(141,198,63,.10),transparent),radial-gradient(700px 400px at 0% 0%,rgba(29,78,216,.08),transparent)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);color:var(--ac1);font-weight:600;font-size:.78rem;border-radius:999px;padding:6px 14px;box-shadow:0 4px 14px rgba(29,78,216,.08)}
+  .hero h1{font-size:clamp(2.1rem,5.4vw,3.6rem);line-height:1.12;margin:18px 0 16px;color:var(--ink);letter-spacing:-.02em;font-weight:700}
+  .hero h1 .accent,.accent{background:var(--grad2);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{color:var(--muted);font-size:1rem;max-width:520px;margin:0 0 26px}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+  .play{display:inline-flex;align-items:center;gap:12px;font-weight:600;font-size:.9rem;color:var(--ink)}
+  .play i{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ac1);box-shadow:0 10px 26px rgba(29,78,216,.25)}
+  .hero-visual-wrap{position:relative}
+  #hero-visual{position:relative;aspect-ratio:1/1.08;border-radius:26px;overflow:hidden;background:var(--grad2);box-shadow:0 30px 60px rgba(29,78,216,.28)}
+  .hs-slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;display:flex;align-items:flex-end;justify-content:center}
+  .hs-slide.on{opacity:1}
+  .hs-slide svg{width:100%;height:100%}
+  .hs-cap{position:absolute;left:18px;bottom:16px;right:18px;color:#fff;font-weight:600;font-size:.9rem;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+  .chip{position:absolute;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 14px 34px rgba(11,31,69,.16);display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;z-index:2}
+  .chip i{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--grad)}
+  .chip small{display:block;color:var(--muted);font-weight:500;font-size:.7rem}
+  .chip.a{top:8%;right:-14px}.chip.b{bottom:12%;left:-16px}
+  .dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
+  .dots button{width:9px;height:9px;border-radius:99px;border:0;background:#cfd3ea;cursor:pointer;padding:0;transition:.25s}
+  .dots button[aria-current="true"]{width:28px;background:var(--ac1)}
+  @media(max-width:900px){.hero{padding:34px 0 50px}.hero-grid{grid-template-columns:1fr}.chip.a{right:8px}.chip.b{left:8px}}
+
+  /* ── feature strip ── */
+  .strip{margin-top:-34px;position:relative;z-index:3}
+  .strip-box{background:var(--grad2);border-radius:26px;padding:34px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px;color:#fff;box-shadow:0 26px 54px rgba(29,78,216,.3)}
+  .feat .ico{width:46px;height:46px;border:1.5px solid rgba(255,255,255,.55);border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .feat .ico .icon{width:24px;height:24px}
+  .feat h3{margin:0 0 4px;font-size:1rem}.feat p{margin:0;font-size:.84rem;opacity:.9}
+  @media(max-width:900px){.strip-box{grid-template-columns:1fr 1fr;padding:26px 22px;gap:22px}}
+  @media(max-width:480px){.strip-box{grid-template-columns:1fr}}
+
+  /* ── sections ── */
+  section.sec{padding:84px 0}
+  .eyebrow{color:var(--ac2d);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin:0 0 8px}
+  h2.t{font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.2;margin:0 0 12px;letter-spacing:-.015em}
+  .lead{color:var(--muted);max-width:620px;margin:0 0 30px}
+  .center{text-align:center}.center .lead{margin-inline:auto}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{display:block;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .2s,box-shadow .2s,border-color .2s}
+  a.card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(29,78,216,.14);border-color:rgba(29,78,216,.35)}
+  .card .ico{width:50px;height:50px;border-radius:14px;background:var(--soft);color:var(--ac1);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+  .card .ico .icon{width:26px;height:26px}
+  .card h3{margin:0 0 6px;font-size:1.05rem}.card p{margin:0;color:var(--muted);font-size:.9rem}
+  .card .go{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font-weight:600;font-size:.85rem;color:var(--ac1)}
+  @media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.cards{grid-template-columns:1fr}section.sec{padding:60px 0}}
+
+  /* about */
+  .about{display:grid;grid-template-columns:.95fr 1.05fr;gap:54px;align-items:center}
+  #mission-visual{position:relative;aspect-ratio:1/.95;border-radius:30px;background:linear-gradient(160deg,#eef0ff,#eef8dc);overflow:hidden}
+  .about-art{position:absolute;inset:0}
+  .badge-card{position:absolute;left:-10px;top:22%;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 16px 36px rgba(11,31,69,.16);display:flex;gap:12px;align-items:center;z-index:2}
+  .badge-card i{width:38px;height:38px;border-radius:11px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center}
+  .badge-card b{display:block;font-size:.95rem;line-height:1.2}.badge-card small{color:var(--muted);font-size:.72rem}
+  .about-mark{position:relative}
+  .li{display:flex;gap:14px;margin:0 0 18px}
+  .li .ico{width:44px;height:44px;border-radius:50%;background:#fdecf3;color:#e1457a;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .li:nth-child(2) .ico{background:#e9edff;color:var(--ac1)}
+  .li h3{margin:0 0 2px;font-size:1rem}.li p{margin:0;color:var(--muted);font-size:.9rem}
+  @media(max-width:900px){.about{grid-template-columns:1fr}.badge-card{left:8px}}
+
+  /* values slider */
+  .vals{background:var(--soft)}
+  .vals-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}
+  .vals-visual{position:relative;aspect-ratio:1/1.05;border-radius:24px;background:var(--grad2);overflow:hidden;box-shadow:0 26px 50px rgba(29,78,216,.25)}
+  .vcard{background:#fff;border-radius:18px;border-left:5px solid var(--gold);padding:26px;box-shadow:0 18px 40px rgba(11,31,69,.08);min-height:190px}
+  .vcard h3{margin:0 0 8px;font-size:1.25rem}.vcard p{margin:0;color:var(--muted)}
+  .vcard .tag{display:inline-block;margin-top:14px;font-weight:600;font-size:.8rem;color:var(--ac1)}
+  .arrows{display:flex;gap:12px;margin-top:20px}
+  .arrows button{width:46px;height:46px;border-radius:13px;border:0;cursor:pointer;color:#fff;background:var(--grad);display:flex;align-items:center;justify-content:center}
+  .arrows button:first-child{background:#d9d6fb;color:#fff}
+  @media(max-width:900px){.vals-grid{grid-template-columns:1fr}}
+
+  /* cta + footer */
+  .cta{background:var(--grad2);border-radius:28px;padding:46px 34px;color:#fff;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 26px 54px rgba(29,78,216,.3)}
+  .cta h2{margin:0 0 6px;font-size:clamp(1.4rem,3vw,2rem)}.cta p{margin:0;opacity:.9}
+  .cta .btn{background:#fff;color:var(--ac1)}
+  footer.site{background:var(--royal);color:#c9d0e6;padding:64px 0 26px;margin-top:84px}
+  .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px}
+  .footer-brand-name{color:#fff;font-weight:700;font-size:1.05rem;margin:12px 0 8px;line-height:1.3}
+  footer h4{color:#fff;margin:0 0 14px;font-size:.95rem}
+  footer ul{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:.88rem}
+  footer a:hover{color:#fff}
+  .copy{border-top:1px solid rgba(255,255,255,.12);margin-top:38px;padding-top:20px;font-size:.8rem;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  @media(max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.fgrid{grid-template-columns:1fr}}
+
+  .rev{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.rev.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.rev{opacity:1;transform:none;transition:none}.hs-slide{transition:none}.btn:hover,a.card:hover{transform:none}}
+  .hidden-by-default{display:none}
+  .vm2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+  .vm2-card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--ac2);border-radius:var(--radius);padding:28px;box-shadow:0 18px 40px rgba(11,31,92,.07)}
+  .vm2-card h3{margin:0 0 10px;font-size:1.25rem;color:var(--royal)}.vm2-card p{margin:0;color:var(--muted)}
+  .vm2-list{list-style:none;margin:0;padding:0}.vm2-list li{position:relative;padding-left:28px;margin:10px 0;color:var(--muted)}
+  .vm2-list li::before{content:"\2713";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--ac2);color:var(--royal);font-weight:700;font-size:.72rem;display:flex;align-items:center;justify-content:center}
+  .motto{margin:14px 0 0;font-weight:600;color:var(--ac2d);font-style:italic;letter-spacing:.01em}
+  .motto-line{margin:2px 0 10px;color:var(--gold);font-weight:600;font-style:italic;font-size:.88rem}
+  .logo-crest.logo-img{width:auto;height:52px;background:none;box-shadow:none;border-radius:0;overflow:visible}
+  .logo-crest.logo-img img{height:100%;width:auto;display:block;object-fit:contain}
+  .logo-img.on-dark{display:inline-flex!important;width:fit-content!important;background:#fff!important;border-radius:14px!important;padding:4px;width:auto!important;height:62px!important}
+  @media(max-width:760px){.vm2{grid-template-columns:1fr}.logo-crest.logo-img{height:44px}}
+</style>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a href="index.html" class="logo" aria-label="Home">
+      <div class="logo-crest logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+      <div class="logo-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+    </a>
+    <button class="menu" id="menu" aria-label="Menu" aria-expanded="false" aria-controls="nav"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <nav class="main" id="nav" aria-label="Main">
+      <a class="l" href="index.html" aria-current="page">Home</a>
+      <a class="l" href="about.html">About</a>
+      <a class="l" href="events.html">Events</a>
+      <a class="l" href="admission.html">Admission</a>
+      <a class="l" href="results.html">Check Results</a>
+      <a class="l" href="contact.html">Contact</a>
+      <a class="btn primary sm" href="login.html">Portal Login</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="pill"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l10 5-10 5L2 8l10-5z"/><path d="M6 10.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5"/></svg> Admissions open &middot; Student &amp; parent portal</span>
+        <h1 id="hero-title" data-site="hero_heading">Raising Godly, Brilliant Leaders of Tomorrow</h1>
+        <p class="motto">Godliness with Excellence</p>
+        <p class="sub" data-site="hero_subtext">We blend faith, excellence and innovation to nurture every child academically, morally and spiritually.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="admission.html">Apply for admission</a>
+          <a class="play" href="#about"><i><svg class="icon" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M8 5.5v13l11-6.5z"/></svg></i> Learn more</a>
+        </div>
+      </div>
+      <div class="hero-visual-wrap">
+        <div id="hero-visual" role="group" aria-roledescription="carousel" aria-label="Highlights"></div>
+        <div class="chip a" aria-hidden="true"><i><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Results online<small>Any time, any device</small></span></div>
+        <div class="chip b" aria-hidden="true"><i><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 5-3 8-7 9.5-4-1.5-7-4.5-7-9.5V6l7-3z"/></svg></i><span>Safe &amp; caring<small>Secure logins</small></span></div>
+        <div class="dots" id="hero-dots" role="tablist" aria-label="Choose slide"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE STRIP -->
+  <div class="strip"><div class="wrap"><div class="strip-box rev">
+    <div class="feat"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg></div><h3>Online results</h3><p>See report cards and positions the moment they are published.</p></div>
+    <div class="feat"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></div><h3>Attendance &amp; timetable</h3><p>Know where your child should be, and whether they were there.</p></div>
+    <div class="feat"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8 20h8M12 16.5V20M8 9l2.5 2.5L16 8"/></svg></div><h3>Computer tests</h3><p>Students take class tests on screen with instant scoring.</p></div>
+    <div class="feat"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div><h3>Fees made simple</h3><p>Check fee status and pay online, with a clear record every time.</p></div>
+  </div></div></div>
+
+  <!-- EXPLORE -->
+  <section class="sec" id="explore">
+    <div class="wrap">
+      <div class="center rev"><p class="eyebrow">Explore</p><h2 class="t">Everything you need, in one place</h2><p class="lead">Start an application, check a result, or sign in to your portal.</p></div>
+      <div class="cards">
+        <a class="card rev" href="admission.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5H7A.5.5 0 0 1 6.5 20V4a.5.5 0 0 1 .5-.5z"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h6"/></svg></div><h3>Admission</h3><p>Apply online in a few minutes and track your reference number.</p><span class="go">Apply now &rarr;</span></a>
+        <a class="card rev" href="results.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M12 14v3M9 21h6"/></svg></div><h3>Check results</h3><p>Use your result PIN to view a published report card.</p><span class="go">Check a result &rarr;</span></a>
+        <a class="card rev" href="login.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></svg></div><h3>Portal login</h3><p>Students, parents, teachers and administrators sign in here.</p><span class="go">Sign in &rarr;</span></a>
+        <a class="card rev" href="events.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></div><h3>Events</h3><p>See what is coming up on the school calendar.</p><span class="go">View events &rarr;</span></a>
+        <a class="card rev" href="about.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13z"/></svg></div><h3>About us</h3><p>Our story, our values and what we believe.</p><span class="go">Read more &rarr;</span></a>
+        <a class="card rev" href="contact.html"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6.5h16v11H4z"/><path d="M4 7l8 6 8-6"/></svg></div><h3>Contact</h3><p>Questions? Reach the school office and admissions team.</p><span class="go">Get in touch &rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about" style="padding-top:20px">
+    <div class="wrap about">
+      <div class="about-mark rev">
+        <div id="mission-visual">
+          <svg class="about-art" viewBox="0 0 400 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs><linearGradient id="ga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#3d8f2f"/></linearGradient></defs>
+            <circle cx="215" cy="185" r="125" fill="url(#ga)" opacity=".95"/><circle cx="215" cy="185" r="150" fill="none" stroke="#3d8f2f" stroke-opacity=".35" stroke-dasharray="3 7"/>
+            <circle cx="92" cy="150" r="9" fill="#f59e0b"/><circle cx="330" cy="92" r="7" fill="#ef4444"/><circle cx="352" cy="270" r="8" fill="#22c55e"/>
+            <path d="M150 200l65-30 65 30-65 30z" fill="#fff"/><path d="M178 213v34c0 10 17 20 37 20s37-10 37-20v-34l-37 17z" fill="#e8ebff"/><path d="M280 200v38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle cx="280" cy="242" r="7" fill="#f59e0b"/>
+            <rect x="120" y="262" width="150" height="20" rx="4" fill="#fff" opacity=".95"/><rect x="132" y="284" width="130" height="18" rx="4" fill="#dfe3ff"/>
+          </svg>
+        </div>
+        <div class="badge-card" aria-hidden="true"><i><svg class="icon" viewBox="0 0 24 24"><path d="M12 20.5S3.5 15.4 3.5 9.4A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 8.5 2.2c0 6-8.5 11.1-8.5 11.1z"/></svg></i><span><b>Faith &middot; Excellence &middot; Innovation</b><small>What we stand for</small></span></div>
+      </div>
+      <div class="rev">
+        <p class="eyebrow">Know about us</p>
+        <h2 class="t" data-site="mission_heading">A School Built on Faith &amp; Excellence</h2>
+        <p class="lead" data-site="mission_text">We provide an education rooted in Christian values, where every child is known, encouraged and challenged to reach their full potential.</p>
+        <div class="li"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20.5S3.5 15.4 3.5 9.4A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 8.5 2.2c0 6-8.5 11.1-8.5 11.1z"/></svg></div><div><h3>Character first</h3><p>Good conduct and faith are taught alongside every subject.</p></div></div>
+        <div class="li"><div class="ico"><svg class="icon" viewBox="0 0 24 24"><path d="M7 12c0-2 1.5-3.5 3.5-3.5S14 12 14 12s1.5 3.5 3.5 3.5S21 14 21 12s-1.5-3.5-3.5-3.5S14 12 14 12s-1.5 3.5-3.5 3.5S7 14 7 12z" transform="translate(-3 0)"/></svg></div><div><h3>Learning that connects</h3><p>Parents and students follow progress online, wherever they are.</p></div></div>
+        <a class="btn primary" href="about.html">More about us &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION & MISSION -->
+  <section class="sec" id="vision-mission">
+    <div class="wrap">
+      <div class="center rev"><p class="eyebrow">Who we are</p><h2 class="t">Our vision &amp; mission</h2><p class="lead">Godliness with Excellence</p></div>
+      <div class="vm2">
+        <div class="vm2-card rev"><h3>Our Vision</h3><p><b>Building Children with Excellence:</b><br>The fear of God, Maximizing Their Potentials.</p></div>
+        <div class="vm2-card rev"><h3>Our Mission</h3><ul class="vm2-list"><li>Nurturing, Challenging, Godly and child-centred Environment.</li><li>Dedicated and well-seasoned teachers.</li><li>Holistic care, incorporating latest audio visual technologies.</li><li>Affiliation to foreign examination.</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN-EDITABLE HIGHLIGHT CARDS (shown only when the school adds them in Site Settings) -->
+  <section class="sec" id="grid-cards-outer" style="display:none;padding-top:0"><div class="wrap"><div class="cards" id="grid-cards-section"></div></div></section>
+
+  <!-- ADMIN-EDITABLE VIDEO (shown only when a YouTube link is set in Site Settings) -->
+  <section class="sec" id="video-section" style="display:none;padding-top:0"><div class="wrap"><div id="video-embed-wrap" style="aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:#000"></div></div></section>
+
+  <!-- VALUES SLIDER -->
+  <section class="sec vals" id="values">
+    <div class="wrap vals-grid">
+      <div class="vals-visual rev" id="vals-visual" aria-hidden="true"></div>
+      <div class="rev">
+        <p class="eyebrow">Why families choose us</p>
+        <h2 class="t">What our school stands for</h2>
+        <div class="vcard" id="vcard" aria-live="polite"><h3 id="v-title"></h3><p id="v-text"></p><span class="tag" id="v-tag"></span></div>
+        <div class="arrows"><button type="button" id="v-prev" aria-label="Previous"><svg class="icon" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" id="v-next" aria-label="Next"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sec" style="padding-bottom:0">
+    <div class="wrap"><div class="cta rev">
+      <div><h2>Ready to join the VIFF family?</h2><p>Start your child's application today. It only takes a few minutes.</p></div>
+      <a class="btn" href="admission.html">Apply for admission &rarr;</a>
+    </div></div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div><div class="logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div><div class="footer-brand-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div><p class="motto-line">Godliness with Excellence</p><p style="margin:0;font-size:.88rem;max-width:300px">Faith, excellence and innovation for every child.</p><p style="margin:10px 0 0;font-size:.85rem;max-width:300px" data-site="address">Emerald Garden Estate, Dakwo District, Sunnyvale, Lokogoma, Abuja</p></div>
+      <div><h4>Quick links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About us</a></li><li><a href="events.html">Events</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div><h4>Admissions</h4><ul><li><a href="admission.html">Apply online</a></li><li><a href="results.html">Check results</a></li></ul></div>
+      <div><h4>Portal</h4><ul><li><a href="login.html">Student login</a></li><li><a href="login.html">Parent login</a></li><li><a href="login.html">Teacher login</a></li><li><a href="login.html">Admin login</a></li></ul></div>
+    </div>
+    <div class="copy"><span>&copy; <span id="yr"></span> VIFF FOUNDATION INTERNATIONAL ACADEMY. All rights reserved.</span><span><a href="contact.html">Contact the school office</a></span></div>
+  </div>
+</footer>
+
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function $(id) { return document.getElementById(id); }
+
+  // mobile menu
+  var menu = $('menu'), nav = $('nav');
+  menu.addEventListener('click', function () { var o = nav.classList.toggle('open'); menu.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  nav.addEventListener('click', function (e) { if (e.target.closest('a')) { nav.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
+  $('yr').textContent = new Date().getFullYear();
+
+  // heading: last word in the accent gradient (re-applied if the admin's text is loaded after us)
+  var title = $('hero-title'), busy = false;
+  function accent() {
+    if (busy || !title || title.querySelector('.accent')) return; busy = true;
+    var words = title.textContent.trim().split(/\s+/);
+    if (words.length > 2) {
+      var last = words.pop(), span = document.createElement('span'); span.className = 'accent'; span.textContent = last;
+      title.textContent = words.join(' ') + ' '; title.appendChild(span);
+    }
+    busy = false;
+  }
+  accent();
+  new MutationObserver(function () { accent(); }).observe(title, { childList: true, characterData: true });
+
+  // hero slides (illustrations). If the school uploads its own slides in Site Settings, those replace these automatically.
+  var hv = $('hero-visual'), dotsBox = $('hero-dots');
+  var G1 = '<defs><linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#3d8f2f"/></linearGradient></defs><rect width="400" height="432" fill="url(#hg1)"/>';
+  var SLIDES = [
+    { cap: 'Learning with purpose', svg: G1 + '<circle cx="320" cy="90" r="60" fill="#fff" opacity=".12"/><circle cx="70" cy="330" r="80" fill="#fff" opacity=".1"/><path d="M80 235l120-52 120 52-120 52z" fill="#fff"/><path d="M128 262v58c0 16 32 32 72 32s72-16 72-32v-58l-72 30z" fill="#e8ebff"/><path d="M320 235v62" stroke="#fff" stroke-width="7" stroke-linecap="round"/><circle cx="320" cy="304" r="11" fill="#fbbf24"/><circle cx="106" cy="120" r="9" fill="#fbbf24"/><circle cx="305" cy="150" r="6" fill="#fff"/><rect x="104" y="332" width="192" height="26" rx="6" fill="#fff" opacity=".95"/><rect x="120" y="360" width="160" height="22" rx="6" fill="#dfe3ff"/>' },
+    { cap: 'Results and progress, online', svg: G1 + '<circle cx="60" cy="80" r="70" fill="#fff" opacity=".1"/><rect x="70" y="86" width="260" height="228" rx="22" fill="#fff"/><rect x="96" y="112" width="110" height="12" rx="6" fill="#c7cdf5"/><rect x="96" y="134" width="70" height="9" rx="4.5" fill="#e3e6fb"/><rect x="104" y="256" width="30" height="36" rx="7" fill="#c7cdf5"/><rect x="148" y="224" width="30" height="68" rx="7" fill="#8b9af0"/><rect x="192" y="190" width="30" height="102" rx="7" fill="#5b6fe6"/><rect x="236" y="158" width="30" height="134" rx="7" fill="#3d8f2f"/><circle cx="296" cy="124" r="20" fill="#22c55e"/><path d="M286 124l7 7 13-14" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="130" y="340" width="140" height="14" rx="7" fill="#fff" opacity=".85"/>' },
+    { cap: 'A caring community', svg: G1 + '<circle cx="200" cy="216" r="150" fill="#fff" opacity=".1"/><g fill="#fff"><circle cx="200" cy="150" r="34"/><path d="M130 292c4-50 33-74 70-74s66 24 70 74z"/></g><g fill="#fbbf24"><circle cx="112" cy="196" r="26"/><path d="M62 316c3-38 24-58 50-58s47 20 50 58z"/></g><g fill="#e8ebff"><circle cx="290" cy="196" r="26"/><path d="M240 316c3-38 24-58 50-58s47 20 50 58z"/></g><path d="M300 78l8 16 18 3-13 12 3 18-16-9-16 9 3-18-13-12 18-3z" fill="#fde68a"/>' }
+  ];
+  var slideEls = [], dotEls = [], cur = 0, timer = null;
+  SLIDES.forEach(function (s, i) {
+    var d = document.createElement('div'); d.className = 'hs-slide' + (i === 0 ? ' on' : ''); d.setAttribute('role', 'group'); d.setAttribute('aria-label', (i + 1) + ' of ' + SLIDES.length);
+    d.innerHTML = '<svg viewBox="0 0 400 432" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + s.svg + '</svg>';   // static, trusted markup
+    var cap = document.createElement('div'); cap.className = 'hs-cap'; cap.textContent = s.cap; d.appendChild(cap);
+    hv.appendChild(d); slideEls.push(d);
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', 'Show slide ' + (i + 1)); b.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+    b.addEventListener('click', function () { go(i); restart(); }); dotsBox.appendChild(b); dotEls.push(b);
+  });
+  function go(n) { cur = (n + SLIDES.length) % SLIDES.length; slideEls.forEach(function (e, i) { e.classList.toggle('on', i === cur); }); dotEls.forEach(function (e, i) { e.setAttribute('aria-current', i === cur ? 'true' : 'false'); }); }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function restart() { stop(); if (!reduce && slideEls.length) timer = setInterval(function () { go(cur + 1); }, 5500); }
+  restart();
+  hv.addEventListener('mouseenter', stop); hv.addEventListener('mouseleave', restart);
+  new MutationObserver(function () { if (!hv.querySelector('.hs-slide')) { stop(); dotsBox.hidden = true; } }).observe(hv, { childList: true });   // the school's own slides took over
+
+  // values slider
+  var VALUES = [
+    { t: 'Faith that shapes character', p: 'We teach and model honesty, kindness and respect, so good character grows alongside good grades.', g: 'Faith' },
+    { t: 'Excellence in everything', p: 'High expectations, clear feedback and steady support help every student give their best.', g: 'Excellence' },
+    { t: 'Care for every child', p: 'Small steps are noticed and celebrated. Teachers and parents work together, and the portal keeps everyone informed.', g: 'Care' },
+    { t: 'Learning for tomorrow', p: 'From computer-based tests to online results, we use technology to make school simpler and more transparent.', g: 'Innovation' }
+  ];
+  var vi = 0, vv = $('vals-visual');
+  vv.innerHTML = '<svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#3d8f2f"/></linearGradient></defs><rect width="400" height="420" fill="url(#gv)"/><circle cx="330" cy="70" r="90" fill="#fff" opacity=".1"/><circle cx="40" cy="380" r="110" fill="#fff" opacity=".1"/><path d="M200 70l32 66 72 10-52 50 12 72-64-34-64 34 12-72-52-50 72-10z" fill="#fde68a"/><rect x="110" y="318" width="180" height="16" rx="8" fill="#fff" opacity=".85"/><rect x="140" y="344" width="120" height="12" rx="6" fill="#fff" opacity=".55"/></svg>';
+  function showValue(n) { vi = (n + VALUES.length) % VALUES.length; var v = VALUES[vi]; $('v-title').textContent = v.t; $('v-text').textContent = v.p; $('v-tag').textContent = (vi + 1) + ' / ' + VALUES.length + '  \u00B7  ' + v.g; }
+  $('v-prev').addEventListener('click', function () { showValue(vi - 1); }); $('v-next').addEventListener('click', function () { showValue(vi + 1); });
+  showValue(0);
+
+  // reveal on scroll
+  var items = document.querySelectorAll('.rev');
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12 });
+    items.forEach(function (el, i) { el.style.transitionDelay = Math.min((i % 6) * 70, 350) + 'ms'; io.observe(el); });
+  } else items.forEach(function (el) { el.classList.add('in'); });
+})();
+</script>
+</body>
+</html>

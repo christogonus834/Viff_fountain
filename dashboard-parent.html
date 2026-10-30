@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Parent Dashboard – VIFF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"/>
+<link rel="stylesheet" href="dashboard.css"/>
+<link rel="stylesheet" href="tfis-ui.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="parent-api.js"></script>
+<script src="tfis-ui.js"></script>
+<script src="tfis-parts.js"></script>
+<script src="parent-dashboard.js"></script>
+<script src="site-settings.js"></script>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="ui2">
+<div id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-crest logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+    <div><div class="sidebar-school">VIFF</div><div class="sidebar-abbr">Parent portal</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">My Child</div>
+    <button class="nav-item active" data-page="overview" onclick="showPage('overview',this)"><span class="icon" data-icon="home"></span>Dashboard</button>
+    <button class="nav-item" data-page="results" onclick="showPage('results',this)"><span class="icon" data-icon="results"></span>Results</button>
+    <button class="nav-item" data-page="attendance" onclick="showPage('attendance',this)"><span class="icon" data-icon="calendar"></span>Attendance</button>
+    <button class="nav-item" data-page="timetable" onclick="showPage('timetable',this)"><span class="icon" data-icon="clock"></span>Timetable</button>
+    <button class="nav-item" data-page="fees" onclick="showPage('fees',this)"><span class="icon" data-icon="wallet"></span>Fees &amp; Payments</button>
+    <div class="nav-section-label">School</div>
+    <button class="nav-item" data-page="notifications" onclick="showPage('notifications',this)"><span class="icon" data-icon="bell"></span>Notifications<span class="nav-badge" id="notif-badge" style="display:none"></span></button>
+    <button class="nav-item" data-page="events" onclick="showPage('events',this)"><span class="icon" data-icon="calendar"></span>Events</button>
+    <div class="nav-section-label">Account</div>
+    <a class="nav-item" href="my-id-cards.html" target="_blank" rel="noopener"><span class="icon" data-icon="lock"></span>My Children's ID Cards</a>
+    <a class="nav-item" href="my-reports.html?role=parent" target="_blank" rel="noopener"><span class="icon" data-icon="results"></span>Report Cards</a>
+    <button class="nav-item" data-page="profile" onclick="showPage('profile',this)"><span class="icon" data-icon="user"></span>My Profile</button>
+    <button class="nav-item" data-page="password" onclick="showPage('password',this)"><span class="icon" data-icon="lock"></span>Change Password</button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="p-avatar">P</div>
+      <div><div class="sidebar-user-name" id="p-name">Loading…</div><div class="sidebar-user-role">Parent / Guardian</div></div>
+    </div>
+    <button class="btn-logout" onclick="logout()"><span class="icon" data-icon="logout"></span> Logout</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="openSidebar()" aria-label="Open menu"><span class="icon" data-icon="menu"></span></button>
+      <span class="page-title" id="page-title">Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-term" id="topbar-term" style="display:none"></span>
+      <button type="button" class="topbar-btn" id="topbar-bell" aria-label="Notifications" onclick="showPage('notifications',document.querySelector('.nav-item[data-page=notifications]'))"><span class="icon" data-icon="bell"></span><span class="topbar-notif" id="topbar-bell-count" style="display:none"></span></button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div id="page-overview" class="tab-content active"><div id="overview-body"><div class="ui-skel" style="height:240px;border-radius:14px"></div></div></div>
+    <div id="page-results" class="tab-content"><div id="results-body"></div></div>
+    <div id="page-attendance" class="tab-content"><div id="attendance-body"></div></div>
+    <div id="page-timetable" class="tab-content"><div id="timetable-body"></div></div>
+    <div id="page-fees" class="tab-content"><div id="fees-body"></div></div>
+    <div id="page-notifications" class="tab-content"><div id="notifications-body"></div></div>
+    <div id="page-events" class="tab-content"><div id="events-body"></div></div>
+    <div id="page-profile" class="tab-content"><div id="profile-body"></div></div>
+    <div id="page-password" class="tab-content"><div id="password-body"></div></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

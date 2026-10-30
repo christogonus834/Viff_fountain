@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Student Dashboard – VIFF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"/>
+<link rel="stylesheet" href="dashboard.css"/>
+<link rel="stylesheet" href="tfis-ui.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="student-api.js"></script>
+<script src="tfis-ui.js"></script>
+<script src="student-dashboard.js"></script>
+<script src="site-settings.js"></script>
+<!-- jsPDF for report card PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="ui2">
+<div id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-crest logo-crest logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+    <div><div class="sidebar-school">VIFF</div><div class="sidebar-abbr">Student portal</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <button class="nav-item active" data-page="overview" onclick="showPage('overview',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9.5h12V10"/></g></svg></span>Dashboard</button>
+    <button class="nav-item" data-page="results" onclick="showPage('results',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg></span>My Results</button>
+    <button class="nav-item" data-page="attendance" onclick="showPage('attendance',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3.5v3M16 3.5v3M4 8.5h16"/><rect x="3.5" y="5" width="17" height="15.5" rx="2"/></g></svg></span>My Attendance</button>
+    <button class="nav-item" data-page="cbt" onclick="showPage('cbt',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/><circle cx="17.5" cy="16.5" r="0.9" fill="currentColor" stroke="none"/></g></svg></span>CBT Tests</button>
+    <button class="nav-item" data-page="notifications" onclick="showPage('notifications',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"/><path d="M10 18.5a2 2 0 0 0 4 0"/></g></svg></span>Notifications<span class="nav-badge" id="notif-badge" style="display:none"></span></button>
+    <div class="nav-section-label">School</div>
+    <button class="nav-item" data-page="events" onclick="showPage('events',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg></span>Events</button>
+    <button class="nav-item" data-page="timetable" onclick="showPage('timetable',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg></span>Timetable</button>
+    <div class="nav-section-label">Account</div>
+    <button class="nav-item" data-page="profile" onclick="showPage('profile',this)"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg></span>My Profile</button>
+    <a href="id-card.html?role=student" target="_blank" rel="noopener" class="nav-item"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M13 9.5h5M13 12.5h5M6 16.5h6"/></g></svg></span>My ID Card</a>
+    <a href="results.html" class="nav-item"><span class="icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></g></svg></span>PIN Result Check</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="s-avatar">S</div>
+      <div><div class="sidebar-user-name" id="s-name">Loading…</div><div class="sidebar-user-role" id="s-class">Student</div></div>
+    </div>
+    <button class="btn-logout" onclick="logout()"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M9 4H6a1.5 1.5 0 0 0-1.5 1.5v13A1.5 1.5 0 0 0 6 20h3"/><path d="M20 12H10.5M17 8.5L20.5 12 17 15.5"/></g></svg> Logout</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="openSidebar()"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 6.5h16M4 12h16M4 17.5h16"/></g></svg></button>
+      <span class="page-title" id="page-title">Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-term" id="topbar-term" style="display:none"></span>
+      <button type="button" class="topbar-btn" id="topbar-bell" aria-label="Notifications" onclick="showPage('notifications',document.querySelector('.nav-item[data-page=notifications]'))"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"/><path d="M10 18.5a2 2 0 0 0 4 0"/></g></svg><span class="topbar-notif" id="topbar-bell-count" style="display:none"></span></button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- OVERVIEW -->
+    <div id="page-overview" class="tab-content active">
+      <div id="overview-body">
+        <div class="empty-state"><div class="empty-icon"><svg class="icon icon-spin" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7"/></g></svg></div><p>Loading…</p></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="page-results" class="tab-content">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg> My Results</span><span class="badge badge-gold" id="results-term-badge" style="display:none"></span></div>
+        <div class="panel-body" id="results-body">
+          <div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg></div>
+            <p>Your results will appear here once published by admin.</p>
+            <p style="margin-top:.75rem;font-size:.83rem;color:var(--muted);">Need to unlock results? Use your PIN on the <a href="results.html" style="color:var(--gold);font-weight:600;">Result Check page</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div id="page-attendance" class="tab-content">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3.5v3M16 3.5v3M4 8.5h16"/><rect x="3.5" y="5" width="17" height="15.5" rx="2"/></g></svg> My Attendance</span><span id="student-att-rate-badge" class="badge badge-gold"></span></div>
+        <div class="panel-body" style="padding:0;">
+          <div class="table-responsive">
+            <table class="dash-table">
+              <thead><tr><th>Date</th><th>Status</th><th>Note</th></tr></thead>
+              <tbody id="student-attendance-body"><tr><td colspan="3" class="loading-cell">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CBT TESTS -->
+    <div id="page-cbt" class="tab-content">
+      <div id="cbt-student-list-view">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/><circle cx="17.5" cy="16.5" r="0.9" fill="currentColor" stroke="none"/></g></svg> Available Tests</span></div>
+          <div class="panel-body" style="padding:0;">
+            <div class="table-responsive">
+              <table class="dash-table">
+                <thead><tr><th>Title</th><th>Subject</th><th>Duration</th><th>Status</th><th></th></tr></thead>
+                <tbody id="cbt-student-exams-body"><tr><td colspan="5" class="loading-cell">Loading…</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEST-TAKING VIEW -->
+      <div id="cbt-taking-view" style="display:none;">
+        <div class="panel" style="position:sticky;top:0;z-index:5;margin-bottom:1rem;">
+          <div class="panel-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;">
+            <div>
+              <div style="font-weight:700;" id="cbt-taking-title">Test</div>
+              <div style="font-size:.8rem;color:var(--muted);" id="cbt-taking-progress">Question 1 of 10</div>
+            </div>
+            <div style="font-size:1.3rem;font-weight:700;color:var(--royal);" id="cbt-timer">--:--</div>
+          </div>
+        </div>
+        <div class="panel" style="margin-bottom:1rem;">
+          <div class="panel-body" id="cbt-question-container"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:.75rem;">
+          <button class="btn btn-outline" id="cbt-prev-btn" onclick="cbtGoToQuestion(_cbtCurrentIndex-1)">&larr; Previous</button>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="cbt-question-jumper"></div>
+          <button class="btn btn-outline" id="cbt-next-btn" onclick="cbtGoToQuestion(_cbtCurrentIndex+1)">Next &rarr;</button>
+        </div>
+        <div style="margin-top:1.5rem;text-align:center;">
+          <button class="btn btn-gold" onclick="doSubmitCbtAttempt(false)">Submit Test</button>
+        </div>
+      </div>
+
+      <!-- RESULT VIEW -->
+      <div id="cbt-result-view" style="display:none;">
+        <div class="panel">
+          <div class="panel-body" style="text-align:center;padding:3rem 1.5rem;">
+            <svg class="icon icon-success" style="width:48px;height:48px;" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></g></svg>
+            <h3 style="margin-top:1rem;">Test Submitted</h3>
+            <p style="color:var(--muted);margin-top:.5rem;" id="cbt-result-text"></p>
+            <button class="btn btn-outline" style="margin-top:1.5rem;" onclick="loadCbtStudentList()">Back to Tests</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div id="page-notifications" class="tab-content">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"/><path d="M10 18.5a2 2 0 0 0 4 0"/></g></svg> Notifications</span></div>
+        <div id="notifications-body">
+          <div class="empty-state"><div class="empty-icon"><svg class="icon icon-spin" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7"/></g></svg></div><p>Loading…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div id="page-events" class="tab-content">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg> School Events</span></div>
+        <div class="panel-body" id="events-body">
+          <div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg></div><p>No events posted yet.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMETABLE -->
+    <div id="page-timetable" class="tab-content">
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> Class Timetable</span></div>
+        <div class="panel-body" id="timetable-body">
+          <div class="empty-state"><div class="empty-icon"><svg class="icon icon-spin" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7"/></g></svg></div><p>Loading timetable…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="page-profile" class="tab-content">
+      <div class="ui-alert" id="pw-required-banner" style="display:none" role="alert"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><path d="M12 17.3v.01"/></g></svg><div>You are signing in with a temporary password. Please choose a new password below before you continue.</div></div>
+      <div class="profile-header">
+        <div class="avatar avatar-lg avatar-gold" id="profile-avatar">S</div>
+        <div>
+          <div class="profile-name" id="profile-name">Loading…</div>
+          <div class="profile-role">Student</div>
+          <div style="font-size:.83rem;color:rgba(255,255,255,.65);margin-top:4px;" id="profile-meta"></div>
+        </div>
+      </div>
+      <div class="panel" style="max-width:540px;">
+        <div class="panel-header"><span class="panel-title">Change Password</span></div>
+        <div class="panel-body">
+          <div class="form-group"><div class="form-label">Current Password</div><input type="password" class="form-control" id="pw-cur"/></div>
+          <div class="form-group"><div class="form-label">New Password</div>
+            <input type="password" class="form-control" id="pw-new" placeholder="At least 8 characters, with upper/lowercase and a number" oninput="checkPw(this)"/>
+            <div id="pw-hint" style="display:none;font-size:.75rem;margin-top:5px;line-height:2;">
+              <span id="pr1" style="color:#dc2626;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 6l12 12M18 6l-12 12"/></g></svg> A lowercase letter</span> &nbsp;
+              <span id="pr2" style="color:#dc2626;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 6l12 12M18 6l-12 12"/></g></svg> An uppercase letter</span> &nbsp;
+              <span id="pr3" style="color:#dc2626;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 6l12 12M18 6l-12 12"/></g></svg> A number, 8+ chars total</span>
+            </div>
+          </div>
+          <div class="form-group"><div class="form-label">Confirm Password</div><input type="password" class="form-control" id="pw-conf"/></div>
+          <button class="btn btn-gold" onclick="doChangePw()">Update Password</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+let _u = null;
+let _mustChange = false;
+let _overviewShown = false;
+let _sessionOk = false;
+
+const _userReady = (async function () {
+  const session = await requireLogin();
+  if (!session) return;
+  _sessionOk = true;
+  _u = await getUser();
+  // Signed out, or signed in with a non-student account → back to login.
+  if (!_u && (window.__studentAuthStatus === 401 || window.__studentAuthStatus === 403)) {
+    window.location.href = 'login.html';
+    return;
+  }
+  if (_u && _u.role !== 'student') { _u = null; window.location.href = 'login.html'; }
+})();
+
+window.addEventListener('load', async function() {
+  await _userReady;
+  if (!_u) {
+    // Network/server problem (not an auth problem): say so, offer a retry.
+    if (_sessionOk && window.__studentAuthStatus !== 401 && window.__studentAuthStatus !== 403) {
+      TFIS.clear(document.getElementById('overview-body')).appendChild(
+        TFIS.h('div', { 'class': 'ui-error' },
+          TFIS.h('p', null, 'We could not load your account. Please check your connection and try again.'),
+          TFIS.h('button', { type: 'button', 'class': 'btn btn-gold', onclick: function () { window.location.reload(); } }, 'Reload')));
+    }
+    return;
+  }
+  const ini = TFIS.initials(_u.name);
+  setText('s-name',        _u.name);
+  setText('s-avatar',      ini);
+  setText('profile-avatar',ini);
+  setText('profile-name',  _u.name);
+  setText('profile-meta',  _u.email||'');
+
+  if (_u.mustChangePassword) { requirePasswordChange(); return; }
+  await StudentOverview.load();
+  _overviewShown = true;
+});
+
+// Temporary password: the server refuses to serve data until it is
+// changed, so send the student straight to the change-password form.
+function requirePasswordChange() {
+  _mustChange = true;
+  document.getElementById('pw-required-banner').style.display = 'flex';
+  showPage('profile', document.querySelector('.nav-item[data-page="profile"]'));
+}
+function afterPasswordChanged() {
+  if (!_mustChange) return;
+  _mustChange = false;
+  document.getElementById('pw-required-banner').style.display = 'none';
+  _overviewShown = true;
+  showPage('overview', document.querySelector('.nav-item[data-page="overview"]'));
+}
+
+async function loadResultsPage() {
+  const box = document.getElementById('results-body');
+  box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon icon-spin" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12a8 8 0 0 1 13.6-5.7M20 12a8 8 0 0 1-13.6 5.7"/></g></svg></div><p>Loading…</p></div>';
+  const r = await getStudentResults();
+  if (!r || !r.ok || !(r.data.results||[]).length) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg></div><p>No published results yet.</p><p style="margin-top:.75rem;font-size:.83rem;color:var(--muted);">Use your PIN on the <a href="results.html" style="color:var(--gold);">Result Check page</a> to unlock your result.</p></div>';
+    return;
+  }
+  const latest = r.data.results[0];
+  const termBadge = document.getElementById('results-term-badge');
+  if (termBadge) { termBadge.textContent = latest.term + ' Term ' + latest.session; termBadge.style.display = ''; }
+  let html = '';
+
+  // ── Position Banner ──
+  // Each score entry has position, classSize stored when admin published
+  let myPosition = null, myClassSize = null, myTotal = null;
+  if (latest.position > 0) { myPosition = latest.position; myClassSize = latest.classSize; }
+
+  if (myPosition) {
+    const suffix = myPosition===1?'st':myPosition===2?'nd':myPosition===3?'rd':'th';
+    const medal  = myPosition===1?'<svg class="icon icon-gold" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3l4 7 4-7"/><circle cx="12" cy="15" r="6"/><path d="M9.5 13.2l1.8 1.8L14.7 11"/></g></svg>':myPosition===2?'<svg class="icon icon-silver" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3l4 7 4-7"/><circle cx="12" cy="15" r="6"/><path d="M9.5 13.2l1.8 1.8L14.7 11"/></g></svg>':myPosition===3?'<svg class="icon icon-bronze" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3l4 7 4-7"/><circle cx="12" cy="15" r="6"/><path d="M9.5 13.2l1.8 1.8L14.7 11"/></g></svg>':'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M8 3l4 7 4-7"/><circle cx="12" cy="15" r="6"/><path d="M9.5 13.2l1.8 1.8L14.7 11"/></g></svg>';
+    html += '<div style="background:linear-gradient(135deg,var(--royal),var(--royal-mid));border-radius:14px;' +
+      'padding:1.25rem 1.75rem;color:white;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">' +
+      '<div style="font-size:3rem;line-height:1;">' + medal + '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:.72rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;">Class Position</div>' +
+        '<div style="font-size:2.2rem;font-weight:700;line-height:1.1;">' +
+          myPosition + '<sup>' + suffix + '</sup>' +
+          ' <span style="font-size:.9rem;opacity:.65;">out of ' + myClassSize + ' students</span>' +
+        '</div>' +
+      '</div>' +
+      (myTotal ? '<div style="text-align:right;"><div style="font-size:.7rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;">Aggregate</div>' +
+        '<div style="font-size:1.8rem;font-weight:700;color:var(--gold);">' + myTotal + '</div></div>' : '') +
+    '</div>';
+  }
+
+  // ── Info boxes ──
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.5rem;">';
+  html += ibox('Student', _u?_u.name:'—') + ibox('Term', latest.term+' '+latest.session);
+  if (latest.className) html += ibox('Class', latest.className);
+  html += ibox('Average', (latest.average||'—')+'%') + '</div>';
+
+  // ── Scores table ──
+  html += '<div class="table-responsive"><table class="dash-table"><thead><tr><th>#</th><th>Subject</th><th>C.A (40)</th><th>Exam (60)</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>';
+  (latest.subjects||[]).forEach(function(s,i){
+    const gc = s.grade==='A'?'grade-a':s.grade==='B'?'grade-b':s.grade==='C'?'grade-c':'grade-f';
+    const rem = s.grade==='A'?'Excellent':s.grade==='B'?'Good':s.grade==='C'?'Average':'Fail';
+    html += '<tr><td>'+(i+1)+'</td><td>'+escapeHtml(s.subject)+'</td><td>'+s.ca+'</td><td>'+s.exam+'</td><td><strong>'+s.total+'</strong></td><td class="'+gc+'">'+s.grade+'</td><td>'+rem+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+
+  // ── Download Report Card button ──
+  html += '<div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">' +
+    '<button class="btn btn-gold" onclick="downloadReportCard()" style="display:flex;align-items:center;gap:.5rem;font-size:.9rem;">' +
+    '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5H7A.5.5 0 0 1 6.5 20V4a.5.5 0 0 1 .5-.5z"/><path d="M14 3.5V7.5h4"/><path d="M9 12h6M9 15h6M9 9h2.5"/></g></svg> Download Report Card (PDF)</button>' +
+    '<span style="font-size:.78rem;color:var(--muted);">Saves as a printable PDF to your device</span>' +
+    '</div>';
+
+  // Store result data on window for PDF generator to access
+  window._reportData = {
+
+  
+    principalRemark: latest.principalRemark || '',
+    student:    _u ? _u.name : '—',
+    className:  latest.className || '—',
+    term:       latest.term || '2nd Term',
+    session:    latest.session || '2025/2026',
+    subjects:   latest.subjects || [],
+    average:    latest.average || '—',
+    position:   myPosition,
+    classSize:  myClassSize,
+    total:      myTotal
+  };
+
+  box.innerHTML = html;
+}
+
+async function loadTimetablePage() {
+  const box = document.getElementById('timetable-body');
+  // figure out the student's class from their profile
+  const pr = await getStudentProfile();
+  const className = (pr && pr.ok && pr.data.student) ? pr.data.student.className : null;
+
+  if (!className) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg></div><p>Class not found. Contact your admin.</p></div>';
+    return;
+  }
+
+  const r = await getMyTimetable(className);
+  if (!r || !r.ok || !(r.data.timetable && r.data.timetable.periods && r.data.timetable.periods.length)) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg></div><p>No timetable set for <strong>' + escapeHtml(className) + '</strong> yet.</p><p style="font-size:.83rem;color:var(--muted);margin-top:.5rem;">Ask your admin to set up the timetable.</p></div>';
+    return;
+  }
+
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const periods = r.data.timetable.periods;
+  let html = '<div style="margin-bottom:.75rem;font-size:.84rem;color:var(--muted);">Class: <strong style="color:var(--royal);">' + escapeHtml(className) + '</strong></div>';
+  html += '<div class="table-responsive"><table class="dash-table"><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Teacher</th></tr></thead><tbody>';
+  let count = 0;
+  days.forEach(function(day){
+    periods.filter(function(p){return p.day===day;}).forEach(function(p){
+      count++;
+      html += '<tr><td style="font-weight:600;color:var(--royal);">'+day+'</td><td>'+escapeHtml(p.period)+'</td><td>'+escapeHtml(p.subject)+'</td><td>'+escapeHtml(p.teacher||'—')+'</td></tr>';
+    });
+  });
+  if (!count) {
+    html += '<tr><td colspan="4" class="loading-cell">No periods yet.</td></tr>';
+  }
+  html += '</tbody></table></div>';
+  box.innerHTML = html;
+}
+
+async function loadNotificationsPage() {
+  const box = document.getElementById('notifications-body');
+  const r = await getStudentNotifications();
+  if (!r || !r.ok || !(r.data.notifications||[]).length) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z"/><path d="M10 18.5a2 2 0 0 0 4 0"/></g></svg></div><p>No notifications yet.</p></div>';
+    return;
+  }
+  const list = r.data.notifications;
+  const unread = list.filter(function(n){return !n.isRead;}).length;
+  const badge = document.getElementById('notif-badge');
+  if (unread > 0) { badge.textContent=unread; badge.style.display=''; } else badge.style.display='none';
+  box.innerHTML = list.map(function(n){
+    return '<div class="notif-item" style="'+(n.isRead?'opacity:.7':'border-left:3px solid var(--ac1)')+';cursor:pointer;" onclick="markRead(\''+n._id+'\',this)">' +
+      '<div class="notif-icon" style="background:var(--blue-bg);"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M3 10v4h3l6 3.5V6.5L6 10H3z"/><path d="M13.5 8.5a5 5 0 0 1 0 7M16.5 6a9 9 0 0 1 0 12"/></g></svg></div>' +
+      '<div style="flex:1;"><div class="notif-title">'+escapeHtml(n.title)+(n.isRead?'':' <span class="badge badge-blue" style="font-size:.65rem;">NEW</span>')+'</div>' +
+      '<div class="notif-body">'+escapeHtml(n.message)+'</div><div class="notif-time">'+fmtDate(n.createdAt)+'</div></div></div>';
+  }).join('');
+}
+
+async function markRead(id, el) {
+  await markNotificationRead(id);
+  el.style.opacity='.7'; el.style.borderLeft='none';
+  const b = el.querySelector('.badge'); if(b) b.remove();
+}
+
+async function loadEventsPage() {
+  const box = document.getElementById('events-body');
+  const r = await getStudentEvents();
+  if (!r || !r.ok || !(r.data.events||[]).length) {
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></g></svg></div><p>No events posted yet.</p></div>';
+    return;
+  }
+  box.innerHTML = r.data.events.map(function(ev){
+    const d = new Date(ev.date);
+    return '<div class="event-item"><div class="event-date-box"><div class="event-date-day">'+d.getDate()+'</div><div class="event-date-mon">'+d.toLocaleString('default',{month:'short'})+'</div></div>' +
+      '<div><div class="event-name">'+escapeHtml(ev.title)+'</div><div class="event-meta"><span>'+(ev.time?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g></svg> '+escapeHtml(ev.time):'')+'</span><span>'+(ev.location?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> '+escapeHtml(ev.location):'')+'</span></div></div></div>';
+  }).join('');
+}
+
+async function doChangePw() {
+  const cur=gv('pw-cur'), nw=gv('pw-new'), cf=gv('pw-conf');
+  if (!cur){showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Enter current password.');return;}
+  if (!(/[a-z]/.test(nw)&&/[A-Z]/.test(nw)&&/[0-9]/.test(nw)&&nw.length>=8)){showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Password must be at least 8 characters with an uppercase letter, a lowercase letter, and a number.');return;}
+  if (nw!==cf){showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Passwords do not match.');return;}
+  const r = await changePassword(cur,nw);
+  if (r&&r.ok){showToast('<svg class="icon icon-success" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></g></svg> Password changed!');['pw-cur','pw-new','pw-conf'].forEach(function(id){document.getElementById(id).value='';}); afterPasswordChanged();}
+  else showToast('<svg class="icon icon-danger" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></svg> '+escapeHtml(r&&r.data?r.data.message:'Failed.'));
+}
+
+function checkPw(input){
+  const v=input.value;
+  document.getElementById('pw-hint').style.display=v?'block':'none';
+  mark('pr1',/[a-z]/.test(v),'A lowercase letter');
+  mark('pr2',/[A-Z]/.test(v),'An uppercase letter');
+  mark('pr3',/[0-9]/.test(v) && v.length>=8,'A number, 8+ chars total');
+}
+function mark(id,ok,label){const el=document.getElementById(id);if(el){el.style.color=ok?'#16a34a':'#dc2626';el.innerHTML=(ok?'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg>':'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 6l12 12M18 6l-12 12"/></g></svg>')+' '+label;}}
+
+function showPage(id,btn){
+  if (_mustChange && id !== 'profile') { showToast('Please change your temporary password first.'); id = 'profile'; btn = document.querySelector('.nav-item[data-page="profile"]'); }
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  const p=document.getElementById('page-'+id); if(p)p.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(el){el.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  const titles={overview:'Dashboard',results:'My Results',attendance:'My Attendance',cbt:'CBT Tests',notifications:'Notifications',events:'Events',timetable:'Timetable',profile:'My Profile'};
+  setText('page-title',titles[id]||id); closeSidebar();
+  if (id==='overview' && _overviewShown) StudentOverview.load();
+  else if (id==='results')       loadResultsPage();
+  else if (id==='attendance')    loadAttendancePage();
+  else if (id==='cbt')           loadCbtStudentList();
+  else if (id==='notifications') loadNotificationsPage();
+  else if (id==='events')        loadEventsPage();
+  else if (id==='timetable')     loadTimetablePage();
+}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebar-backdrop').classList.add('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-backdrop').classList.remove('show');}
+function showToast(m){var t=document.getElementById('toast');t.innerHTML=m;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(function(){t.classList.remove('show');},3500);}
+function setText(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+function gv(id){var el=document.getElementById(id);return el?el.value:'';}
+function fmtDate(d){return d?new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'—';}
+function ibox(label,val){return '<div style="background:#f8f9fc;border-radius:10px;padding:1rem;text-align:center;"><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">'+escapeHtml(label)+'</div><div style="font-weight:600;margin-top:4px;">'+escapeHtml(val)+'</div></div>';}
+// ══════════════════════════════════════════════════════════
+//  REPORT CARD PDF GENERATOR
+//  Uses jsPDF + jsPDF-AutoTable (loaded from CDN)
+//  Called when student clicks "Download Report Card"
+// ══════════════════════════════════════════════════════════
+function downloadReportCard() {
+  const d = window._reportData;
+  if (!d) { showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Load your results first.'); return; }
+
+  // ── Check jsPDF is loaded ──
+  if (typeof window.jspdf === 'undefined') {
+    showToast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> PDF library not loaded. Check your internet connection.');
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const pageW = 210;
+  const pageH = 297;
+  const margin = 15;
+  const contentW = pageW - margin * 2;
+
+  // ══════════════════════════════
+  //  COLOURS
+  // ══════════════════════════════
+  const royal   = [11,  31,  69];   // --royal  #0b1f5c
+  const royalM  = [22,  47, 102];   // --royal-mid
+  const gold    = [212, 168, 67];   // --gold
+  const white   = [255, 255, 255];
+  const lightBg = [244, 246, 251];  // --cream
+  const border  = [220, 224, 235];
+
+  // ══════════════════════════════
+  //  HEADER BANNER
+  // ══════════════════════════════
+  // Deep blue banner
+  doc.setFillColor(...royal);
+  doc.rect(0, 0, pageW, 42, 'F');
+
+  // Gold accent strip at bottom of banner
+  doc.setFillColor(...gold);
+  doc.rect(0, 39, pageW, 3, 'F');
+
+  // TF Crest circle
+  doc.setFillColor(...gold);
+  doc.circle(margin + 12, 20, 12, 'F');
+  doc.setTextColor(...royal);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('TF', margin + 12, 21.5, { align: 'center' });
+
+  // School name
+  doc.setTextColor(...white);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VIFF FOUNDATION INTERNATIONAL ACADEMY', margin + 28, 16);
+
+  // Address
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(200, 210, 230);
+  doc.text('Emerald Garden Estate, Dakwo District, Sunnyvale, Lokogoma, Abuja', margin + 28, 22);
+  doc.text('Faith · Excellence · Character', margin + 28, 27);
+
+  // "STUDENT REPORT CARD" label on right
+  doc.setFillColor(...gold);
+  doc.roundedRect(pageW - margin - 40, 8, 40, 14, 2, 2, 'F');
+  doc.setTextColor(...royal);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('STUDENT', pageW - margin - 20, 14, { align: 'center' });
+  doc.text('REPORT CARD', pageW - margin - 20, 19, { align: 'center' });
+
+  // ══════════════════════════════
+  //  STUDENT INFO BOX
+  // ══════════════════════════════
+  let y = 50;
+
+  doc.setFillColor(...lightBg);
+  doc.roundedRect(margin, y, contentW, 28, 3, 3, 'F');
+  doc.setDrawColor(...border);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(margin, y, contentW, 28, 3, 3, 'S');
+
+  // Left column
+  const col1 = margin + 5;
+  const col2 = margin + contentW / 2 + 5;
+
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 110, 130);
+
+  doc.text('STUDENT NAME', col1, y + 7);
+  doc.text('CLASS', col2, y + 7);
+  doc.text('TERM', col1, y + 18);
+  doc.text('SESSION', col2, y + 18);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...royal);
+
+  doc.text(d.student,  col1, y + 13);
+  doc.text(d.className, col2, y + 13);
+  doc.text(d.term,     col1, y + 24);
+  doc.text(d.session,  col2, y + 24);
+
+  // ══════════════════════════════
+  //  PERFORMANCE SUMMARY STRIP
+  // ══════════════════════════════
+  y += 35;
+
+  const boxW  = (contentW - 6) / 3;
+  const boxes = [
+    { label: 'AVERAGE SCORE', value: (d.average || '—') + '%' },
+    { label: 'CLASS POSITION', value: d.position ? (d.position + ordinal(d.position) + ' / ' + d.classSize) : '—' },
+    { label: 'AGGREGATE',      value: d.total ? String(d.total) : '—' }
+  ];
+
+  boxes.forEach(function(box, i) {
+    const bx = margin + i * (boxW + 3);
+    const isGold = i === 1; // highlight position box
+    doc.setFillColor(...(isGold ? gold : royal));
+    doc.roundedRect(bx, y, boxW, 16, 2, 2, 'F');
+    doc.setTextColor(...(isGold ? royal : white));
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.text(box.label, bx + boxW / 2, y + 5.5, { align: 'center' });
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text(box.value, bx + boxW / 2, y + 12.5, { align: 'center' });
+  });
+
+  // ══════════════════════════════
+  //  RESULTS TABLE
+  // ══════════════════════════════
+  y += 23;
+
+  // Section heading
+  doc.setFillColor(...royal);
+  doc.rect(margin, y, contentW, 7, 'F');
+  doc.setTextColor(...gold);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.text('ACADEMIC PERFORMANCE', margin + contentW / 2, y + 4.8, { align: 'center' });
+
+  y += 7;
+
+  // Build table rows from subjects
+  const tableRows = (d.subjects || []).map(function(s, i) {
+    const remark = s.grade === 'A' ? 'Excellent' :
+                   s.grade === 'B' ? 'Good'      :
+                   s.grade === 'C' ? 'Average'   : 'Fail';
+    return [i + 1, s.subject, s.ca, s.exam, s.total, s.grade, remark];
+  });
+
+  doc.autoTable({
+    startY: y,
+    head: [['#', 'Subject', 'C.A (/40)', 'Exam (/60)', 'Total (/100)', 'Grade', 'Remark']],
+    body: tableRows,
+    margin: { left: margin, right: margin },
+    styles: {
+      fontSize: 9,
+      cellPadding: 3,
+      lineColor: border,
+      lineWidth: 0.2,
+      textColor: royal,
+      font: 'helvetica'
+    },
+    headStyles: {
+      fillColor: royalM,
+      textColor: white,
+      fontStyle: 'bold',
+      fontSize: 8.5,
+      halign: 'center'
+    },
+    columnStyles: {
+      0: { halign: 'center', cellWidth: 10 },
+      2: { halign: 'center' },
+      3: { halign: 'center' },
+      4: { halign: 'center', fontStyle: 'bold' },
+      5: { halign: 'center', fontStyle: 'bold' },
+      6: { halign: 'center' }
+    },
+    alternateRowStyles: { fillColor: lightBg },
+    didParseCell: function(data) {
+      // Colour grade cells
+      if (data.column.index === 5 && data.section === 'body') {
+        const g = data.cell.raw;
+        if (g === 'A') { data.cell.styles.textColor = [22, 163, 74];  data.cell.styles.fontStyle = 'bold'; }
+        if (g === 'B') { data.cell.styles.textColor = [37, 99, 235];  data.cell.styles.fontStyle = 'bold'; }
+        if (g === 'C') { data.cell.styles.textColor = [217, 119, 6];  data.cell.styles.fontStyle = 'bold'; }
+        if (g === 'F') { data.cell.styles.textColor = [220, 38, 38];  data.cell.styles.fontStyle = 'bold'; }
+      }
+    }
+  });
+
+  // ══════════════════════════════
+  //  GRADE KEY + REMARKS
+  // ══════════════════════════════
+  let finalY = doc.lastAutoTable.finalY + 8;
+
+  // Check if we're too close to the bottom — if so start a new area
+  if (finalY > pageH - 55) finalY = pageH - 55;
+
+  // Grade key box
+  doc.setFillColor(...lightBg);
+  doc.roundedRect(margin, finalY, 80, 18, 2, 2, 'F');
+  doc.setDrawColor(...border);
+  doc.roundedRect(margin, finalY, 80, 18, 2, 2, 'S');
+
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...royal);
+  doc.text('GRADE KEY', margin + 5, finalY + 6);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  const gradeKey = 'A = 70–100 (Excellent)   B = 60–69 (Good)   C = 50–59 (Average)   F = 0–49 (Fail)';
+  doc.text(gradeKey, margin + 5, finalY + 12);
+
+  // Principal's comment box
+  const commX = margin + 85;
+  doc.setFillColor(...lightBg);
+  doc.roundedRect(commX, finalY, contentW - 85, 18, 2, 2, 'F');
+  doc.setDrawColor(...border);
+  doc.roundedRect(commX, finalY, contentW - 85, 18, 2, 2, 'S');
+
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...royal);
+  doc.text("PRINCIPAL'S REMARK", commX + 5, finalY + 6);
+
+  // Auto-generate remark based on average
+ // Use principal's remark if set, otherwise fall back to auto-generated
+const avg = parseFloat(d.average) || 0;
+const autoRemark = avg >= 70 ? 'Excellent performance. Keep it up!'  :
+                   avg >= 60 ? 'Good performance. Aim higher!'       :
+                   avg >= 50 ? 'Fair performance. More effort needed.' :
+                               'Poor performance. Significant improvement needed.';
+const remark = (d.principalRemark && d.principalRemark.trim()) ? d.principalRemark : autoRemark;
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(7.5);
+  doc.setTextColor(60, 80, 120);
+  doc.text(remark, commX + 5, finalY + 13);
+
+  // ══════════════════════════════
+  //  SIGNATURE SECTION
+  // ══════════════════════════════
+  finalY += 26;
+
+  const sigBoxW = (contentW - 6) / 3;
+  const sigLabels = ["Class Teacher's Signature", "Principal's Signature", 'School Stamp'];
+
+  sigLabels.forEach(function(label, i) {
+    const sx = margin + i * (sigBoxW + 3);
+    doc.setDrawColor(...border);
+    doc.setLineWidth(0.3);
+    doc.roundedRect(sx, finalY, sigBoxW, 18, 2, 2, 'S');
+
+    // Signature line
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.line(sx + 5, finalY + 12, sx + sigBoxW - 5, finalY + 12);
+
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(120, 130, 150);
+    doc.text(label, sx + sigBoxW / 2, finalY + 16.5, { align: 'center' });
+  });
+
+  // ══════════════════════════════
+  //  FOOTER
+  // ══════════════════════════════
+  doc.setFillColor(...royal);
+  doc.rect(0, pageH - 12, pageW, 12, 'F');
+
+  doc.setTextColor(...gold);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('VIFF FOUNDATION INTERNATIONAL ACADEMY — "Raising Godly, Brilliant Leaders of Tomorrow"', pageW / 2, pageH - 6.5, { align: 'center' });
+
+  doc.setTextColor(160, 180, 210);
+  doc.setFontSize(6.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Generated: ' + new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' }),
+    pageW / 2, pageH - 2.5, { align: 'center' });
+
+  // ══════════════════════════════
+  //  SAVE
+  // ══════════════════════════════
+  const filename = 'VIFF_ReportCard_' + d.student.replace(/\s+/g, '_') + '_' + d.term.replace(/\s+/g,'_') + '_' + d.session + '.pdf';
+  doc.save(filename);
+  showToast('<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M7 3.5h7l4 4V20a.5.5 0 0 1-.5.5H7A.5.5 0 0 1 6.5 20V4a.5.5 0 0 1 .5-.5z"/><path d="M14 3.5V7.5h4"/><path d="M9 12h6M9 15h6M9 9h2.5"/></g></svg> Report Card downloaded!');
+}
+
+// Helper — ordinal suffix
+function ordinal(n) {
+  if (n === 1) return 'st';
+  if (n === 2) return 'nd';
+  if (n === 3) return 'rd';
+  return 'th';
+}
+
+// ── Attendance ──
+async function loadAttendancePage() {
+  const tbody = document.getElementById('student-attendance-body');
+  const r = await getStudentAttendance();
+  const badge = document.getElementById('student-att-rate-badge');
+  if (!r || !r.ok) { tbody.innerHTML = '<tr><td colspan="3" class="loading-cell">Could not load attendance.</td></tr>'; return; }
+
+  if (badge) badge.textContent = r.data.attendanceRate !== null ? r.data.attendanceRate + '% present' : '';
+  const rows = r.data.attendance;
+  tbody.innerHTML = rows.length
+    ? rows.map(function (a) {
+        const s = a.status === 'present' ? '<span class="badge badge-green">Present</span>'
+                : a.status === 'late'    ? '<span class="badge" style="background:#fff7ed;color:#c2410c;">Late</span>'
+                : a.status === 'excused' ? '<span class="badge" style="background:#eff6ff;color:#1d4ed8;">Excused</span>'
+                : '<span class="badge" style="background:#fef2f2;color:#dc2626;">Absent</span>';
+        return '<tr><td>' + new Date(a.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) + '</td><td>' + s + '</td><td>' + escapeHtml(a.note || '—') + '</td></tr>';
+      }).join('')
+    : '<tr><td colspan="3" class="loading-cell">No attendance recorded yet.</td></tr>';
+}
+
+// ── CBT Tests ──
+let _cbtExamState = null;   // { examId, questions, deadline, answers }
+let _cbtCurrentIndex = 0;
+let _cbtTimerHandle = null;
+
+function showCbtView(which) {
+  document.getElementById('cbt-student-list-view').style.display = which === 'list' ? '' : 'none';
+  document.getElementById('cbt-taking-view').style.display = which === 'taking' ? '' : 'none';
+  document.getElementById('cbt-result-view').style.display = which === 'result' ? '' : 'none';
+}
+
+async function loadCbtStudentList() {
+  showCbtView('list');
+  if (_cbtTimerHandle) { clearInterval(_cbtTimerHandle); _cbtTimerHandle = null; }
+  const tbody = document.getElementById('cbt-student-exams-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">Loading…</td></tr>';
+  const r = await getAvailableCbtExams();
+  if (!r || !r.ok || !(r.data.exams||[]).length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="loading-cell">No tests available right now.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = r.data.exams.map(function(e) {
+    let action, status;
+    if (e.attemptStatus === 'submitted') {
+      status = '<span class="badge badge-green">Completed</span>';
+      action = '<span style="font-weight:600;">' + e.score + ' / ' + e.totalMarks + '</span>';
+    } else if (e.attemptStatus === 'in_progress') {
+      status = '<span class="badge" style="background:#fef9c3;color:#854d0e;">In Progress</span>';
+      action = '<button class="btn btn-gold btn-xs" onclick="doStartCbtExam(\'' + e._id + '\')">Resume</button>';
+    } else {
+      status = '<span class="badge badge-gold">Available</span>';
+      action = '<button class="btn btn-gold btn-xs" onclick="doStartCbtExam(\'' + e._id + '\')">Start Test</button>';
+    }
+    return '<tr><td><strong>'+escapeHtml(e.title)+'</strong></td><td>'+escapeHtml(e.subject)+'</td><td>'+e.duration_minutes+' min</td><td>'+status+'</td><td>'+action+'</td></tr>';
+  }).join('');
+}
+
+async function doStartCbtExam(examId) {
+  // startCbtAttempt() calls the cbt-start-attempt Edge Function, which
+  // is the ONLY way this page ever sees questions — the correct answer
+  // for each one is stripped server-side before this response is sent.
+  const r = await startCbtAttempt(examId);
+  if (!r || !r.ok) {
+    showToast('<svg class="icon icon-danger" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></svg> ' + escapeHtml(r && r.data ? r.data.message : 'Could not start test.'));
+    return;
+  }
+  _cbtExamState = {
+    examId: examId,
+    title: r.data.exam.title,
+    questions: r.data.questions,
+    deadline: new Date(r.data.deadline).getTime(),
+    answers: Object.assign({}, r.data.previousAnswers || {}),
+  };
+  _cbtCurrentIndex = 0;
+  showCbtView('taking');
+  renderCbtQuestionJumper();
+  cbtGoToQuestion(0);
+  startCbtTimer();
+}
+
+function startCbtTimer() {
+  if (_cbtTimerHandle) clearInterval(_cbtTimerHandle);
+  function tick() {
+    const remaining = Math.max(0, _cbtExamState.deadline - Date.now());
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    const timerEl = document.getElementById('cbt-timer');
+    if (timerEl) {
+      timerEl.textContent = String(mins).padStart(2,'0') + ':' + String(secs).padStart(2,'0');
+      timerEl.style.color = remaining < 60000 ? '#dc2626' : '';
+    }
+    if (remaining <= 0) {
+      clearInterval(_cbtTimerHandle);
+      showToast('Time is up — submitting your answers automatically.');
+      doSubmitCbtAttempt(true);
+    }
+  }
+  tick();
+  _cbtTimerHandle = setInterval(tick, 1000);
+}
+
+function renderCbtQuestionJumper() {
+  const wrap = document.getElementById('cbt-question-jumper');
+  wrap.innerHTML = _cbtExamState.questions.map(function(q, i) {
+    const answered = _cbtExamState.answers[q.id];
+    return '<button class="btn btn-xs ' + (i===_cbtCurrentIndex ? 'btn-gold' : (answered ? 'btn-outline' : 'btn-outline')) + '" style="' +
+      (answered ? 'background:#eff6ff;' : '') + 'min-width:32px;" onclick="cbtGoToQuestion(' + i + ')">' + (i+1) + '</button>';
+  }).join('');
+}
+
+function cbtGoToQuestion(index) {
+  if (!_cbtExamState) return;
+  const total = _cbtExamState.questions.length;
+  if (index < 0 || index >= total) return;
+  _cbtCurrentIndex = index;
+  const q = _cbtExamState.questions[index];
+  document.getElementById('cbt-taking-title').textContent = _cbtExamState.title;
+  document.getElementById('cbt-taking-progress').textContent = 'Question ' + (index+1) + ' of ' + total;
+  document.getElementById('cbt-prev-btn').disabled = index === 0;
+  document.getElementById('cbt-next-btn').disabled = index === total - 1;
+
+  const selected = _cbtExamState.answers[q.id] || '';
+  const options = [['a', q.optionA], ['b', q.optionB], ['c', q.optionC], ['d', q.optionD]];
+  document.getElementById('cbt-question-container').innerHTML =
+    '<div style="font-weight:600;margin-bottom:1rem;">' + escapeHtml(q.questionText) + '</div>' +
+    options.map(function(opt) {
+      const letter = opt[0], text = escapeHtml(opt[1]);
+      return '<label style="display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;border:1px solid var(--border);border-radius:10px;margin-bottom:.5rem;cursor:pointer;' +
+        (selected === letter ? 'border-color:var(--ac1);background:var(--soft);' : '') + '">' +
+        '<input type="radio" name="cbt-opt" value="' + letter + '" ' + (selected===letter?'checked':'') + ' onchange="cbtSelectAnswer(\'' + q.id + '\',\'' + letter + '\')">' +
+        letter.toUpperCase() + '. ' + text +
+      '</label>';
+    }).join('');
+
+  renderCbtQuestionJumper();
+}
+
+function cbtSelectAnswer(questionId, letter) {
+  _cbtExamState.answers[questionId] = letter;
+  renderCbtQuestionJumper();
+}
+
+async function doSubmitCbtAttempt(isAutoSubmit) {
+  if (!_cbtExamState) return;
+  if (!isAutoSubmit) {
+    const unanswered = _cbtExamState.questions.filter(function(q){ return !_cbtExamState.answers[q.id]; }).length;
+    if (unanswered > 0 && !confirm(unanswered + ' question(s) unanswered. Submit anyway?')) return;
+  }
+  if (_cbtTimerHandle) { clearInterval(_cbtTimerHandle); _cbtTimerHandle = null; }
+
+  // The server grades this itself (see cbt-submit-attempt) — this
+  // request only ever carries the student's chosen letters, never a
+  // score, so there's no way to submit a fabricated result.
+  const r = await submitCbtAttempt(_cbtExamState.examId, _cbtExamState.answers);
+  if (!r || !r.ok) {
+    showToast('<svg class="icon icon-danger" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></svg> ' + escapeHtml(r && r.data ? r.data.message : 'Could not submit test.'));
+    return;
+  }
+  document.getElementById('cbt-result-text').textContent = 'Score: ' + r.data.score + ' / ' + r.data.totalMarks;
+  showCbtView('result');
+  _cbtExamState = null;
+}
+
+</script>
+</body>
+</html>

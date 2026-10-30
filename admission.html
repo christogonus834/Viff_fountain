@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Apply for Admission – VIFF FOUNDATION INTERNATIONAL ACADEMY</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<script src="demo-data.js"></script>
+<script src="supabase-client.js"></script>
+<script src="supabase-auth.js"></script>
+<script src="supabase-api.js"></script>
+<script src="demo-layer.js"></script>
+<script src="site-settings.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:#f4f6fb;color:#1a1a2e;min-height:100vh;}
+:root{
+  --navy:#0b1f5c;--navy2:#14307e;--gold:#8dc63f;--gold2:#b6e063;
+  --goldpale:#f1f9e2;--white:#fff;--muted:#6b7280;--border:#dde1e9;
+  --green:#16a34a;--red:#dc2626;
+}
+
+/* HEADER */
+.site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.35);border-bottom:2px solid rgba(141,198,63,.2);}
+.header-wrap{max-width:1200px;margin:0 auto;padding:0 1.5rem;height:70px;display:flex;align-items:center;justify-content:space-between;}
+.site-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-badge{width:44px;height:44px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--navy);box-shadow:0 3px 12px rgba(141,198,63,.35);}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:.97rem;font-weight:700;color:#fff;display:block;}
+.logo-tag{font-size:.58rem;font-weight:600;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;display:block;}
+.site-nav{display:flex;align-items:center;gap:.15rem;}
+.site-nav a{text-decoration:none;color:rgba(255,255,255,.68);font-size:.84rem;font-weight:500;padding:7px 13px;border-radius:7px;transition:all .2s;white-space:nowrap;}
+.site-nav a:hover,.site-nav a.active{color:var(--gold);}
+.site-nav .nav-pill{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy)!important;font-weight:700!important;padding:7px 14px;border-radius:7px;margin-left:4px;box-shadow:0 2px 10px rgba(141,198,63,.4);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;}
+@media(max-width:880px){
+  .site-nav{display:none;position:absolute;top:70px;left:0;right:0;background:var(--navy);flex-direction:column;align-items:stretch;padding:.75rem 1rem;border-top:1px solid rgba(141,198,63,.12);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+  .site-nav.open{display:flex;}
+  .site-nav a{padding:11px 14px;}
+  .hamburger{display:flex;}
+}
+
+/* HERO */
+.adm-hero{background:linear-gradient(155deg,var(--navy) 0%,var(--navy2) 50%,#1d4ed8 100%);padding:4.5rem 1.5rem 4rem;position:relative;overflow:hidden;color:#fff;}
+.adm-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(141,198,63,.15) 0%,transparent 70%);pointer-events:none;}
+.adm-hero::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.016) 41px);pointer-events:none;}
+.adm-hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:2;}
+.hero-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(141,198,63,.15);border:1px solid rgba(141,198,63,.4);color:var(--gold2);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:1.4rem;}
+.adm-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:700;line-height:1.1;margin-bottom:1rem;}
+.adm-hero h1 em{font-style:italic;color:var(--gold2);}
+.adm-hero p{color:rgba(255,255,255,.7);font-size:.97rem;line-height:1.75;max-width:560px;}
+
+/* LAYOUT */
+.adm-body{max-width:1100px;margin:0 auto;padding:3.5rem 1.5rem 5rem;}
+.adm-layout{display:grid;grid-template-columns:260px 1fr;gap:2.5rem;align-items:start;}
+@media(max-width:820px){.adm-layout{grid-template-columns:1fr;}}
+
+/* ASIDE */
+.adm-aside{position:sticky;top:82px;}
+.steps-panel{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.6rem;box-shadow:0 2px 14px rgba(0,0,0,.06);margin-bottom:1.25rem;}
+.steps-panel-title{font-size:.67rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;gap:7px;}
+.steps-panel-title::before{content:'';width:16px;height:2px;background:var(--gold);border-radius:1px;}
+.step-row{display:flex;align-items:flex-start;gap:11px;}
+.step-vline{width:2px;height:22px;margin:3px 0 3px 12px;border-radius:1px;background:var(--border);transition:background .3s;}
+.step-vline.done{background:var(--green);}
+.step-vline.active{background:var(--gold);}
+.step-dot{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.77rem;font-weight:700;color:var(--muted);background:#eef0f5;transition:all .3s;}
+.step-dot.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);box-shadow:0 2px 10px rgba(141,198,63,.4);}
+.step-dot.done{background:var(--green);color:#fff;}
+.step-info h5{font-size:.86rem;font-weight:600;color:var(--navy);margin-bottom:1px;line-height:1.3;}
+.step-info p{font-size:.73rem;color:var(--muted);}
+.contact-panel{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:1.5rem;color:rgba(255,255,255,.72);font-size:.83rem;line-height:1.7;}
+.contact-panel h4{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold2);margin-bottom:.75rem;}
+.contact-panel strong{color:#fff;}
+.contact-panel a{color:var(--gold2);text-decoration:none;}
+
+/* FORM CARD */
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:2.5rem;box-shadow:0 4px 28px rgba(0,0,0,.08);}
+@media(max-width:560px){.form-card{padding:1.5rem 1.25rem;}}
+
+/* Progress */
+.pbar{height:6px;background:#eef0f5;border-radius:3px;margin-bottom:.7rem;overflow:hidden;}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px;transition:width .45s ease;}
+.pbar-meta{display:flex;justify-content:space-between;font-size:.77rem;color:var(--muted);margin-bottom:1.75rem;}
+.pbar-meta strong{color:var(--navy);font-weight:600;}
+
+/* Form steps */
+.fstep{display:none;}
+.fstep.show{display:block;animation:stepIn .3s ease;}
+@keyframes stepIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fstep-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;padding-bottom:.7rem;border-bottom:2px solid var(--goldpale);margin-bottom:1.6rem;}
+
+/* Form fields */
+.fg{margin-bottom:1.2rem;}
+.fg>label{display:block;font-family:'Outfit',sans-serif;font-size:.84rem;font-weight:600;color:var(--navy);margin-bottom:7px;line-height:1.4;}
+.fg>label .req{color:var(--red);margin-left:2px;font-weight:700;}
+.fg input[type=text],
+.fg input[type=email],
+.fg input[type=tel],
+.fg input[type=date],
+.fg input[type=number],
+.fg input[type=password],
+.fg select,
+.fg textarea{
+  display:block;width:100%;padding:12px 15px;
+  font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:400;
+  color:#1a1a2e;background:#f9fafc;border:1.5px solid #d0d5df;
+  border-radius:10px;outline:none;-webkit-appearance:none;appearance:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;line-height:1.5;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(141,198,63,.14);background:#fff;}
+.fg input.err,.fg select.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.1);}
+.fg textarea{resize:vertical;min-height:90px;}
+.fg .hint{font-size:.74rem;color:var(--muted);margin-top:5px;line-height:1.5;}
+.sel-wrap{position:relative;}
+.sel-wrap::after{content:'▾';position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:.85rem;}
+.sel-wrap select{padding-right:36px;cursor:pointer;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+@media(max-width:580px){.frow,.frow3{grid-template-columns:1fr;}}
+
+/* Checkbox */
+.chk-row{display:flex;align-items:flex-start;gap:11px;padding:1rem 1.1rem;background:#f9fafc;border:1.5px solid #d0d5df;border-radius:10px;cursor:pointer;}
+.chk-row input[type=checkbox]{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--gold);cursor:pointer;}
+.chk-row label{font-size:.86rem;color:var(--navy);cursor:pointer;line-height:1.55;font-weight:400;}
+
+/* Info boxes */
+.ibox{padding:.9rem 1.1rem;border-radius:10px;font-size:.83rem;line-height:1.6;margin-bottom:1.25rem;}
+.ibox-gold{background:var(--goldpale);border:1px solid rgba(141,198,63,.35);color:#7a5800;}
+.ibox-blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;}
+
+/* Review */
+.review-panel{background:#f8f9fc;border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem 1.75rem;}
+@media(max-width:500px){.review-grid{grid-template-columns:1fr;}}
+.rv-lbl{font-size:.69rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px;}
+.rv-val{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.4;}
+
+/* Nav buttons */
+.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);gap:1rem;}
+.btn-prev,.btn-next{display:inline-flex;align-items:center;gap:7px;padding:12px 26px;border-radius:10px;font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;border:none;transition:all .2s;line-height:1;}
+.btn-prev{background:transparent;border:1.5px solid var(--border);color:var(--muted);}
+.btn-prev:hover{border-color:var(--navy);color:var(--navy);}
+.btn-next{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);box-shadow:0 3px 14px rgba(141,198,63,.35);}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(141,198,63,.5);}
+.btn-next:disabled{opacity:.6;cursor:not-allowed;transform:none!important;}
+
+/* Success */
+.success-box{text-align:center;padding:2.5rem 1rem 1rem;}
+.success-box .s-emoji{font-size:4rem;margin-bottom:.75rem;}
+.success-box h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--navy);margin-bottom:.6rem;}
+.success-box .s-sub{font-size:.9rem;color:var(--muted);max-width:420px;margin:0 auto 1.75rem;line-height:1.7;}
+.ref-block{display:inline-block;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:14px;padding:1.4rem 2.5rem;margin-bottom:1.75rem;}
+.ref-block .rb-label{font-size:.68rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.ref-block .rb-code{font-family:monospace;font-size:1.6rem;font-weight:700;letter-spacing:.2em;color:var(--gold2);}
+.success-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.sbtn{padding:12px 26px;border-radius:10px;font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;border:none;text-decoration:none;display:inline-block;transition:all .2s;}
+.sbtn-navy{background:var(--navy);color:#fff;}
+.sbtn-navy:hover{background:var(--navy2);}
+.sbtn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);box-shadow:0 3px 12px rgba(141,198,63,.35);}
+.sbtn-gold:hover{transform:translateY(-2px);}
+
+/* Toast */
+#pg-toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--navy);color:#fff;padding:13px 20px;border-radius:12px;font-size:.86rem;border-left:4px solid var(--gold);box-shadow:0 8px 32px rgba(0,0,0,.25);opacity:0;transform:translateY(14px);transition:all .3s;pointer-events:none;max-width:320px;}
+#pg-toast.show{opacity:1;transform:translateY(0);}
+
+/* Footer */
+.site-footer{background:var(--navy);color:rgba(255,255,255,.5);}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;padding:3.5rem 1.5rem 2.5rem;}
+@media(max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr;}}
+.fbrand-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#fff;margin-top:.6rem;}
+.fbrand-sub{font-size:.81rem;margin-top:.5rem;line-height:1.6;max-width:220px;}
+.fcol h4{color:var(--gold);font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:600;margin-bottom:1rem;}
+.fcol a,.fcol p{display:block;color:rgba(255,255,255,.48);font-size:.81rem;text-decoration:none;margin-bottom:.45rem;line-height:1.5;transition:color .2s;}
+.fcol a:hover{color:var(--gold2);}
+.footer-bar{border-top:1px solid rgba(255,255,255,.08);padding:1.2rem 1.5rem;text-align:center;font-size:.74rem;max-width:1200px;margin:0 auto;}
+</style>
+<link rel="stylesheet" href="viff-tokens.css"/>
+<link rel="stylesheet" href="viff-pages.css"/>
+<link rel="icon" type="image/png" href="logo-icon.png"/>
+</head>
+<body class="pg-admission">
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-wrap">
+    <a href="index.html" class="site-logo">
+      <div class="logo-badge logo-img"><img src="logo.png" alt="VIFF Fountain logo"></div>
+      <div>
+        <span class="logo-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</span>
+        <span class="logo-tag">VIFF · Lokogoma, Abuja</span>
+      </div>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="events.html">Events</a>
+      <a href="admission.html" class="active">Admission</a>
+      <a href="results.html">Check Results</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html" class="nav-pill">Portal Login</a>
+    </nav>
+    <button class="hamburger" onclick="document.getElementById('site-nav').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="adm-hero">
+  <div class="adm-hero-inner">
+    <div class="hero-chip"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg> Join the VIFF Family</div>
+    <h1>Apply for <em>Admission</em><br>at VIFF</h1>
+    <p>Take the first step toward a world-class, faith-based education. Fill the form below — our admissions team will contact you within 48 hours.</p>
+  </div>
+</section>
+
+<!-- PAGE BODY -->
+<div class="adm-body">
+  <div class="adm-layout">
+
+    <!-- ASIDE: Steps + Contact -->
+    <aside class="adm-aside">
+      <div class="steps-panel">
+        <div class="steps-panel-title">Application Steps</div>
+        <div class="step-row">
+          <div class="step-dot active" id="dot-1">1</div>
+          <div class="step-info"><h5>Student Information</h5><p>Basic details about the applicant</p></div>
+        </div>
+        <div class="step-vline" id="vl-1"></div>
+        <div class="step-row">
+          <div class="step-dot" id="dot-2">2</div>
+          <div class="step-info"><h5>Academic Background</h5><p>Previous school &amp; class applying for</p></div>
+        </div>
+        <div class="step-vline" id="vl-2"></div>
+        <div class="step-row">
+          <div class="step-dot" id="dot-3">3</div>
+          <div class="step-info"><h5>Parent / Guardian</h5><p>Contact &amp; relationship details</p></div>
+        </div>
+        <div class="step-vline" id="vl-3"></div>
+        <div class="step-row">
+          <div class="step-dot" id="dot-4">4</div>
+          <div class="step-info"><h5>Review &amp; Submit</h5><p>Confirm and send your application</p></div>
+        </div>
+      </div>
+
+      <div class="contact-panel">
+        <h4><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 4.5c1 0 2 .3 2.3 1.1l1 2.4c.3.7 0 1.6-.6 2.1l-1.1.9c1 2.5 3 4.5 5.5 5.5l.9-1.1c.5-.6 1.4-.9 2.1-.6l2.4 1c.8.3 1.1 1.3 1.1 2.3v1.6c0 1.2-1.1 2-2.3 1.8C10.5 20.4 3.6 13.5 2.6 6.8 2.4 5.6 3.2 4.5 4.4 4.5H6z"/></g></svg> Need Help?</h4>
+        Admissions Office:<br>
+        <strong>+234 800 000 0000</strong><br>
+        <strong><a href="mailto:admissions@viffacademy.edu.ng">admissions@viffacademy.edu.ng</a></strong><br><br>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Emerald Garden Estate, Dakwo District,<br>Lokogoma, Abuja<br><br>
+        Mon – Fri: 8:00am – 3:00pm
+      </div>
+    </aside>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+
+      <div class="pbar"><div class="pbar-fill" id="pbar-fill" style="width:25%"></div></div>
+      <div class="pbar-meta">
+        <span id="step-lbl">Step 1 of 4 — Student Information</span>
+        <strong id="step-pct">25%</strong>
+      </div>
+
+      <!-- STEP 1: Student Info -->
+      <div class="fstep show" id="fs-1">
+        <div class="fstep-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg> Student Information</div>
+        <div class="frow">
+          <div class="fg">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="s-fname" placeholder="Student's first name"/>
+          </div>
+          <div class="fg">
+            <label>Last Name <span class="req">*</span></label>
+            <input type="text" id="s-lname" placeholder="Student's last name"/>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Middle Name</label>
+            <input type="text" placeholder="Optional"/>
+          </div>
+          <div class="fg">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" id="s-dob"/>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Gender <span class="req">*</span></label>
+            <div class="sel-wrap">
+              <select id="s-gender">
+                <option value="">— Select —</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Nationality</label>
+            <input type="text" value="Nigerian"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Home Address <span class="req">*</span></label>
+          <input type="text" id="s-address" placeholder="Student's full home address"/>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>State of Origin</label>
+            <input type="text" placeholder="e.g. Edo State"/>
+          </div>
+          <div class="fg">
+            <label>Religion</label>
+            <div class="sel-wrap">
+              <select>
+                <option>Christianity</option>
+                <option>Islam</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Any Medical Condition / Special Needs?</label>
+          <input type="text" placeholder="e.g. Asthma — leave blank if none"/>
+          <div class="hint">This helps us provide the right support. All information is kept confidential.</div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Academic -->
+      <div class="fstep" id="fs-2">
+        <div class="fstep-title"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v4.5c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5V11"/></g></svg> Academic Background</div>
+        <div class="fg">
+          <label>Class Applying For <span class="req">*</span></label>
+          <div class="sel-wrap">
+            <select id="s-class">
+              <option value="">— Select class —</option>
+              <optgroup label="Nursery"><option>Nursery 1</option><option>Nursery 2</option></optgroup>
+              <optgroup label="Primary"><option>Primary 1</option><option>Primary 2</option><option>Primary 3</option><option>Primary 4</option><option>Primary 5</option><option>Primary 6</option></optgroup>
+              <optgroup label="Junior Secondary"><option>JSS1</option><option>JSS2</option><option>JSS3</option></optgroup>
+              <optgroup label="Senior Secondary"><option>SS1</option><option>SS2</option><option>SS3</option></optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Previous School Name <span class="req">*</span></label>
+          <input type="text" id="s-prevschool" placeholder="Full name of last school attended"/>
+        </div>
+        <div class="fg">
+          <label>Previous School Address</label>
+          <input type="text" placeholder="Address of previous school (optional)"/>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Last Class Attended</label>
+            <input type="text" placeholder="e.g. Primary 6 or JSS2"/>
+          </div>
+          <div class="fg">
+            <label>Last Term Average Score</label>
+            <input type="text" placeholder="e.g. 74%"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Academic Achievements / Awards</label>
+          <textarea placeholder="List any prizes, scholarships, or recognitions (optional)…"></textarea>
+        </div>
+        <div class="fg">
+          <label>Extracurricular Interests</label>
+          <input type="text" placeholder="e.g. Football, Music, Debate, Coding"/>
+        </div>
+      </div>
+
+      <!-- STEP 3: Parent/Guardian -->
+      <div class="fstep" id="fs-3">
+        <div class="fstep-title"> Parent / Guardian Details</div>
+        <div class="frow">
+          <div class="fg">
+            <label>Parent / Guardian Full Name <span class="req">*</span></label>
+            <input type="text" id="p-name" placeholder="Full name"/>
+          </div>
+          <div class="fg">
+            <label>Relationship to Student <span class="req">*</span></label>
+            <div class="sel-wrap">
+              <select id="p-rel">
+                <option value="">— Select —</option>
+                <option>Father</option>
+                <option>Mother</option>
+                <option>Guardian</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="p-phone" placeholder="+234 800 000 0000"/>
+          </div>
+          <div class="fg">
+            <label>Alternative Phone</label>
+            <input type="tel" placeholder="+234 800 000 0000 (optional)"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="p-email" placeholder="parent@email.com"/>
+        </div>
+        <div class="frow">
+          <div class="fg">
+            <label>Occupation</label>
+            <input type="text" placeholder="Parent's occupation"/>
+          </div>
+          <div class="fg">
+            <label>How did you hear about VIFF?</label>
+            <div class="sel-wrap">
+              <select>
+                <option>Word of mouth / Referral</option>
+                <option>Social Media</option>
+                <option>Our Website</option>
+                <option>Flyer / Poster</option>
+                <option>Church / Religious Organisation</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Home Address (if different from student)</label>
+          <input type="text" placeholder="Parent's address (if different)"/>
+        </div>
+      </div>
+
+      <!-- STEP 4: Review & Submit -->
+      <div class="fstep" id="fs-4">
+        <div class="fstep-title"> Review Your Application</div>
+        <div class="ibox ibox-blue">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></svg> Please review your details carefully before submitting. Once submitted, contact the admin office to make any corrections.
+        </div>
+        <div class="review-panel">
+          <div class="review-grid" id="review-grid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+        <div class="ibox ibox-gold">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg> By submitting, you confirm all information is accurate. Our admissions team will contact you within 48 hours to schedule an entrance assessment.
+        </div>
+        <div class="chk-row">
+          <input type="checkbox" id="terms-chk"/>
+          <label for="terms-chk">I agree to VIFF's terms of admission and confirm that all information provided is correct and truthful.</label>
+        </div>
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+      <div class="fstep" id="fs-success">
+        <div class="success-box">
+          <div class="s-emoji"><svg class="icon icon-success" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 20l3-9 9 3-9 3z"/><path d="M13 3l1 3M18 6l2 2M9 3.5l1 2"/></g></svg></div>
+          <h2>Application Submitted!</h2>
+          <p class="s-sub">Thank you for applying to VIFF FOUNDATION INTERNATIONAL ACADEMY. Your application has been received and is currently under review by our admissions team.</p>
+          <div class="ref-block">
+            <div class="rb-label">Your Application Reference</div>
+            <div class="rb-code" id="app-ref">VIFF-APP-2025-0000</div>
+          </div>
+          <p style="font-size:.83rem;color:var(--muted);margin:0 auto 1.5rem;line-height:1.65;max-width:380px;">
+            Save your reference number. We will contact you on the phone number provided within <strong style="color:var(--navy);">48 hours</strong> to arrange your entrance assessment.
+          </p>
+          <div class="success-btns">
+            <a href="index.html" class="sbtn sbtn-navy"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M20 12H4.5M10 6l-6 6 6 6"/></g></svg> Back to Home</a>
+            <a href="contact.html" class="sbtn sbtn-gold">Contact Admissions</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAV BUTTONS -->
+      <div class="form-nav" id="form-nav">
+        <button class="btn-prev" id="btn-prev" onclick="prevStep()" style="display:none;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M20 12H4.5M10 6l-6 6 6 6"/></g></svg> Previous</button>
+        <button class="btn-next" id="btn-next" onclick="nextStep()">Next Step <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg></button>
+      </div>
+
+    </div><!-- /form-card -->
+  </div><!-- /adm-layout -->
+</div><!-- /adm-body -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="logo-badge logo-img on-dark"><img src="logo.png" alt="VIFF Fountain logo"></div>
+        <div class="fbrand-name">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+      </div>
+      <p class="fbrand-sub">Raising godly, brilliant leaders of tomorrow. Faith · Excellence · Character.</p>
+    </div>
+    <div class="fcol">
+      <h4>Navigation</h4>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="events.html">Events</a>
+      <a href="admission.html">Admission</a>
+      <a href="results.html">Results</a>
+    </div>
+    <div class="fcol">
+      <h4>Address</h4>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></g></svg> Emerald Garden Estate, Dakwo District</p>
+      <p>Sunnyvale, Lokogoma, Abuja</p>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M6 4.5c1 0 2 .3 2.3 1.1l1 2.4c.3.7 0 1.6-.6 2.1l-1.1.9c1 2.5 3 4.5 5.5 5.5l.9-1.1c.5-.6 1.4-.9 2.1-.6l2.4 1c.8.3 1.1 1.3 1.1 2.3v1.6c0 1.2-1.1 2-2.3 1.8C10.5 20.4 3.6 13.5 2.6 6.8 2.4 5.6 3.2 4.5 4.4 4.5H6z"/></g></svg> +234 800 000 0000</p>
+      <p>admissions@viffacademy.edu.ng</p>
+    </div>
+    <div class="fcol">
+      <h4>Portals</h4>
+      <a href="login.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v4.5c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5V11"/></g></svg> Student Login</a>
+      <a href="login.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg>‍<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg>‍<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="8" r="3.7"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></g></svg> Parent Login</a>
+      <a href="login.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 6.5c-2-1.5-5-2-8-1.5v12.5c3-.5 6 0 8 1.5c2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v12.5"/></g></svg> Teacher Login</a>
+      <a href="login.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3 12h2.2M18.8 12H21M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></g></svg> Admin Login</a>
+    </div>
+  </div>
+  <div class="footer-bar">&copy; 2025 VIFF FOUNDATION INTERNATIONAL ACADEMY · Emerald Garden Estate, Dakwo District, Sunnyvale, Lokogoma, Abuja</div>
+</footer>
+
+<div id="pg-toast"></div>
+
+<script>
+let curStep = 1;
+const TOTAL = 4;
+const META = [
+   {label:'Student Information', pct:25},
+  {label:'Academic Background', pct:50},
+  {label:'Parent / Guardian',   pct:75},
+  {label:'Review & Submit',     pct:100}
+];
+
+function refreshUI() {
+  document.querySelectorAll('.fstep').forEach(s => s.classList.remove('show'));
+  document.getElementById('fs-' + curStep).classList.add('show');
+  const m = META[curStep - 1];
+  document.getElementById('pbar-fill').style.width = m.pct + '%';
+  document.getElementById('step-lbl').textContent = 'Step ' + curStep + ' of ' + TOTAL + ' — ' + m.label;
+  document.getElementById('step-pct').textContent = m.pct + '%';
+  for (let i = 1; i <= TOTAL; i++) {
+    const dot = document.getElementById('dot-' + i);
+    const vl  = document.getElementById('vl-' + i);
+    if (i < curStep)       { dot.className = 'step-dot done';   dot.innerHTML = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg>'; }
+    else if (i === curStep){ dot.className = 'step-dot active'; dot.textContent = i;   }
+    else                   { dot.className = 'step-dot';        dot.textContent = i;   }
+    if (vl) vl.className = 'step-vline' + (i < curStep ? ' done' : i === curStep ? ' active' : '');
+  }
+  document.getElementById('btn-prev').style.display = curStep > 1 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').innerHTML = curStep === TOTAL ? 'Submit Application <svg class="icon icon-success" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9"/></g></svg>' : 'Next Step <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg>';
+  document.querySelector('.form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el && el.value.trim() !== '';
+}
+
+function highlight(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('err');
+  el.focus();
+  setTimeout(() => el.classList.remove('err'), 3000);
+}
+
+function validate(step) {
+  if (step === 1) {
+    if (!val('s-fname'))   { toast(' Please enter the student\'s first name.');   highlight('s-fname');   return false; }
+    if (!val('s-lname'))   { toast(' Please enter the student\'s last name.');    highlight('s-lname');   return false; }
+    if (!val('s-dob'))     { toast(' Please enter the student\'s date of birth.'); highlight('s-dob');   return false; }
+    if (!val('s-gender'))  { toast(' Please select the student\'s gender.');      highlight('s-gender'); return false; }
+    if (!val('s-address')) { toast(' Please enter the student\'s home address.'); highlight('s-address');return false; }
+  }
+  if (step === 2) {
+    if (!val('s-class'))     { toast(' Please select the class you are applying for.'); highlight('s-class');     return false; }
+    if (!val('s-prevschool')){ toast(' Please enter the name of the previous school.'); highlight('s-prevschool');return false; }
+  }
+  if (step === 3) {
+    if (!val('p-name'))  { toast(' Please enter the parent/guardian\'s name.');   highlight('p-name');  return false; }
+    if (!val('p-rel'))   { toast(' Please select the relationship to student.');  highlight('p-rel');   return false; }
+    if (!val('p-phone')) { toast(' Please enter a contact phone number.');        highlight('p-phone'); return false; }
+    const email = document.getElementById('p-email');
+    if (!email || !email.value.includes('@') || !email.value.includes('.')) {
+      toast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Please enter a valid email address.'); highlight('p-email'); return false;
+    }
+  }
+  if (step === 4) {
+    if (!document.getElementById('terms-chk').checked) {
+      toast('<svg class="icon icon-warn" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 3.5L2.5 20h19L12 3.5z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></g></svg> Please tick the checkbox to agree to the terms of admission.');
+      return false;
+    }
+  }
+  return true;
+}
+
+function buildReview() {
+  const g = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : '—'; };
+  const pairs = [
+    ['Student Name',       g('s-fname') + ' ' + g('s-lname')],
+    ['Date of Birth',      g('s-dob')],
+    ['Gender',             g('s-gender')],
+    ['Home Address',       g('s-address')],
+    ['Class Applying For', g('s-class')],
+    ['Previous School',    g('s-prevschool')],
+    ['Parent / Guardian',  g('p-name')],
+    ['Relationship',       g('p-rel')],
+    ['Parent Phone',       g('p-phone')],
+    ['Parent Email',       g('p-email')],
+  ];
+  document.getElementById('review-grid').innerHTML = pairs
+    .map(([l, v]) => `<div><div class="rv-lbl">${l}</div><div class="rv-val">${v || '—'}</div></div>`)
+    .join('');
+}
+
+function nextStep() {
+  if (!validate(curStep)) return;
+  if (curStep === 3) buildReview();
+  if (curStep === TOTAL) { submitForm(); return; }
+  curStep++;
+  refreshUI();
+}
+
+function prevStep() {
+  if (curStep > 1) { curStep--; refreshUI(); }
+}
+
+async function submitForm() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+
+  // Collect all form data
+  const data = {
+    studentName:  (document.getElementById('s-fname').value.trim() + ' ' + document.getElementById('s-lname').value.trim()).trim(),
+    dateOfBirth:  document.getElementById('s-dob').value,
+    gender:       document.getElementById('s-gender').value,
+    address:      document.getElementById('s-address').value.trim(),
+    classApplied: document.getElementById('s-class').value,
+    prevSchool:   document.getElementById('s-prevschool').value.trim(),
+    parentName:   document.getElementById('p-name').value.trim(),
+    parentRel:    document.getElementById('p-rel').value,
+    parentPhone:  document.getElementById('p-phone').value.trim(),
+    parentEmail:  document.getElementById('p-email').value.trim()
+  };
+
+  try {
+    const result = await submitAdmission(data);
+
+    if (!result || !result.ok) {
+      const msg = result && result.data ? result.data.message : 'Submission failed. Please try again.';
+      toast('<svg class="icon icon-danger" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></g></svg> ' + msg);
+      btn.disabled = false; btn.textContent = 'Submit Application';
+      return;
+    }
+
+    // SUCCESS — show the success screen
+    const ref = result.data.referenceNumber || result.data.reference || ('VIFF-APP-' + Date.now().toString().slice(-6));
+    document.getElementById('form-nav').style.display = 'none';
+    document.querySelectorAll('.fstep').forEach(s => s.classList.remove('show'));
+    document.getElementById('fs-success').classList.add('show');
+    document.getElementById('pbar-fill').style.width = '100%';
+    document.getElementById('step-lbl').textContent = 'Application Complete!';
+    document.getElementById('step-pct').textContent = '100%';
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.getElementById('dot-' + i);
+      d.className = 'step-dot done'; d.innerHTML = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M5 12.5l4.5 4.5L19 7"/></g></svg>';
+      const vl = document.getElementById('vl-' + i);
+      if (vl) vl.className = 'step-vline done';
+    }
+    document.getElementById('app-ref').textContent = ref;
+    document.querySelector('.form-card').scrollIntoView({behavior:'smooth', block:'start'});
+
+  } catch (err) {
+    toast(' Something went wrong. Please try again.');
+    btn.disabled = false; btn.textContent = 'Submit Application';
+  }
+}
+
+function toast(msg) {
+  const t = document.getElementById('pg-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
