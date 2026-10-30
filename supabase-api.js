@@ -943,11 +943,11 @@ async function getMyStudentId() {
 // has ever saved anything, and so a partially-saved object doesn't
 // blank out fields the admin never touched.
 const SITE_CONTENT_DEFAULTS = {
-  school_name: "VIFF FOUNDATION INTERNATIONAL ACADEMY",
+  school_name: "VIFF FOUNTAIN INTERNATIONAL ACADEMY",
   school_short_name: 'VIFF',
   tagline: 'Est. 2005 · Lokogoma, Abuja',
   hero_heading: 'Raising Godly, Brilliant Leaders of Tomorrow',
-  hero_subtext: "At VIFF FOUNDATION INTERNATIONAL ACADEMY, we blend faith, excellence, and innovation to nurture every child into their God-given purpose — academically, morally, and spiritually.",
+  hero_subtext: "At VIFF FOUNTAIN INTERNATIONAL ACADEMY, we blend faith, excellence, and innovation to nurture every child into their God-given purpose — academically, morally, and spiritually.",
   hero_image_url: '',
   hero_slides: [], // [{ url, caption }] — empty means fall back to hero_image_url above
   hero_video_url: '',
@@ -957,7 +957,7 @@ const SITE_CONTENT_DEFAULTS = {
   primary_color: '#0b1f5c',
   accent_color: '#8dc63f',
   mission_heading: 'A School Built on Faith & Excellence',
-  mission_text: "VIFF FOUNDATION INTERNATIONAL ACADEMY was founded with a vision to provide world-class education rooted in Christian values. Our holistic approach ensures students don't just pass exams — they become leaders.",
+  mission_text: "VIFF FOUNTAIN INTERNATIONAL ACADEMY was founded with a vision to provide world-class education rooted in Christian values. Our holistic approach ensures students don't just pass exams — they become leaders.",
   mission_image_url: '',
   about_heading: 'A Legacy Rooted in Faith Since 2005',
   about_text: 'What began as a small nursery and primary school has grown into a full-scale international school offering nursery, primary, junior secondary, and senior secondary programmes — all under one roof.',

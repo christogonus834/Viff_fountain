@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════
-   VIFF — VIFF FOUNDATION INTERNATIONAL ACADEMY
+   VIFF — VIFF FOUNTAIN INTERNATIONAL ACADEMY
    Shared Script
 ═══════════════════════════════════ */
 
@@ -9,7 +9,7 @@ function setGreeting() {
   if (!bar) return;
   const h = new Date().getHours();
   const g = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
-  bar.innerHTML = `<strong>${g}!</strong> &nbsp;Welcome to VIFF FOUNDATION INTERNATIONAL ACADEMY — Nurturing Excellence Since 2005 &nbsp;<svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg>&nbsp; <a href="results.html" style="color:var(--gold-light);font-weight:600;text-decoration:none;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg> Check Your Results <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg></a>`;
+  bar.innerHTML = `<strong>${g}!</strong> &nbsp;Welcome to VIFF FOUNTAIN INTERNATIONAL ACADEMY — Nurturing Excellence Since 2005 &nbsp;<svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></g></svg>&nbsp; <a href="results.html" style="color:var(--gold-light);font-weight:600;text-decoration:none;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><rect x="5.5" y="4.5" width="13" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></g></svg> Check Your Results <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M4 12h15.5M14 6l6 6-6 6"/></g></svg></a>`;
 }
 
 // ── NAV HAMBURGER ──
@@ -182,7 +182,7 @@ function renderResult(data, container) {
   container.innerHTML = `
     <div class="result-header">
       <div>
-        <div class="result-school">VIFF FOUNDATION INTERNATIONAL ACADEMY</div>
+        <div class="result-school">VIFF FOUNTAIN INTERNATIONAL ACADEMY</div>
         <div style="font-size:.78rem;color:rgba(255,255,255,.55);margin-top:2px;">${data.term}</div>
       </div>
       <div style="text-align:right;">
